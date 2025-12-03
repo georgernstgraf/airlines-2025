@@ -15,16 +15,19 @@ console.log("🌱 Starting seed...");
 // ensure passengers (no deps)
 console.log(`Ensuring ${ensurePassengers} passengers...`);
 const passengers_to_create = ensurePassengers - await passengerService.count();
-if (passengers_to_create > 0) {
-    const passengerData = Array.from({ length: passengers_to_create }, () => ({
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        email: faker.internet.email(),
-    }));
-    await passengerService.createManyPassengers(passengerData);
-    console.log(`  Created ${passengers_to_create} passengers (duplicates skipped)`);
+let passengers_created = 0;
+while (passengers_created < passengers_to_create) {
+    try {
+        await passengerService.createPassenger({
+            firstName: faker.person.firstName(),
+            lastName: faker.person.lastName(),
+            email: faker.internet.email(),
+        });
+        passengers_created++;
+    } catch (e) {
+        console.error(`Error creating passenger:`, (e as Error).message);
+    }
 }
-
 // ensure planes (no deps)
 console.log(`Ensuring ${ensurePlanes} planes...`);
 const planes_to_create = ensurePlanes - await planeService.count();
