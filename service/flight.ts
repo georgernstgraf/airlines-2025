@@ -71,4 +71,125 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     });
 }
 
-export { count, findMany, findManyWithRelations, findById } from "../Repository/flight.ts";
+export async function updateFlight(
+    id: string,
+    data: Partial<{
+        flightNumber: string;
+        departureTime: Date;
+        arrivalTime: Date;
+        originId: string;
+        destinationId: string;
+        planeId: string;
+    }>
+) {
+    // Validiere Zeiten, falls übergeben
+    if (data.departureTime || data.arrivalTime) {
+        const flight = await flightRepo.findById(id);
+        if (!flight) throw new Error("Flight not found");
+        
+        const departure = data.departureTime || flight.departureTime;
+        const arrival = data.arrivalTime || flight.arrivalTime;
+        
+        if (departure >= arrival) {
+            throw new Error("Departure time must be before arrival time");
+        }
+    }
+    
+    // Validiere Ursprung != Ziel
+    if (data.originId && data.destinationId && data.originId === data.destinationId) {
+        throw new Error("Origin and destination must be different");
+    }
+
+    const { prisma } = await import("../Repository/db.ts");
+    return await prisma.flight.update({
+        where: { id },
+        data,
+        include: { origin: true, destination: true, plane: true }
+    });
+}
+
+export async function deleteFlight(id: string) {
+    const { prisma } = await import("../Repository/db.ts");
+    
+    // Prüfe ob Passagiere gebucht sind
+    const passengersCount = await prisma.flight.findUnique({
+        where: { id },
+        select: { _count: { select: { passengers: true } } }
+    });
+    
+    if ((passengersCount?._count.passengers ?? 0) > 0) {
+        throw new Error("Cannot delete flight with booked passengers");
+    }
+    
+    return await prisma.flight.delete({ where: { id } });
+}
+
+export async function getFlightCapacity(flightId: string) {
+    const flight = await flightRepo.findById(flightId);
+    if (!flight) throw new Error("Flight not found");
+    
+    const { prisma } = await import("../Repository/db.ts");
+    const passengerCount = await prisma.flight.findUnique({
+        where: { id: flightId },
+        select: { _count: { select: { passengers: true } } }
+    });
+    
+    const capacity = flight.plane.capacity;
+    const booked = passengerCount?._count.passengers ?? 0;
+    const available = capacity - booked;
+    
+    return {
+        capacity,
+        booked,
+        available,
+        isFull: available <= 0
+    };
+}
+
+export async function removePassengerFromFlight(flightId: string, passengerId: string) {
+    const { prisma } = await import("../Repository/db.ts");
+    return await prisma.flight.update({
+        where: { id: flightId },
+        data: {
+            passengers: {
+                disconnect: { id: passengerId }
+            }
+        },
+        include: { passengers: true }
+    });
+}
+
+export async function findFlightsByOrigin(originId: string, limit?: number) {
+    const { prisma } = await import("../Repository/db.ts");
+    return await prisma.flight.findMany({
+        where: { originId },
+        include: { origin: true, destination: true, plane: true },
+        take: limit,
+        orderBy: { departureTime: "asc" }
+    });
+}
+
+export async function findFlightsByDestination(destinationId: string, limit?: number) {
+    const { prisma } = await import("../Repository/db.ts");
+    return await prisma.flight.findMany({
+        where: { destinationId },
+        include: { origin: true, destination: true, plane: true },
+        take: limit,
+        orderBy: { departureTime: "asc" }
+    });
+}
+
+export async function findFlightsByRoute(originId: string, destinationId: string, limit?: number) {
+    const { prisma } = await import("../Repository/db.ts");
+    return await prisma.flight.findMany({
+        where: {
+            AND: [
+                { originId },
+                { destinationId }
+            ]
+        },
+        include: { origin: true, destination: true, plane: true },
+        take: limit,
+        orderBy: { departureTime: "asc" }
+    });
+}
