@@ -6,7 +6,7 @@ const app = new Hono();
 app.use(
   "/static/*",
   serveStatic({
-    root: "./static",
+    root: "../static",
   })
 );
 
