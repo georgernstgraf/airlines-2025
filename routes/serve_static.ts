@@ -10,6 +10,4 @@ app.use(
   })
 );
 
-app.get("/", (c) => c.text("Hello there :)"));
-
 Deno.serve(app.fetch);
