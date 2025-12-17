@@ -22,7 +22,7 @@ POST http://localhost:3000/passengers
 Content-Type: application/json
 
 {
-  "firstName": "Max",
+  "firstName": "Maxima",
   "lastName": "Mustermann",
   "email": "max.mustermann@example.com"
 }
