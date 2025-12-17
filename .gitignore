@@ -1,5 +1,6 @@
 .~lock.*#
 **/*.db
+**/*.db-journal
 **/plantuml-images/
 **/node_modules/
 tmp
