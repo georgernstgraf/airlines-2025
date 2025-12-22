@@ -22,9 +22,9 @@ POST http://localhost:3000/passengers
 Content-Type: application/json
 
 {
-  "firstName": "Maxima",
-  "lastName": "Mustermann",
-  "email": "max.mustermann@example.com"
+  "firstName": "Spas",
+  "lastName": "Spasov",
+  "email": "spas.spasov@example.com"
 }
 
 ### ============ PLANES ============
@@ -37,8 +37,8 @@ POST http://localhost:3000/planes
 Content-Type: application/json
 
 {
-  "model": "Airbus A320",
-  "capacity": 180
+  "model": "Boeing 737",
+  "capacity": 230
 }
 
 ### ============ AIRPORTS ============
@@ -51,9 +51,9 @@ POST http://localhost:3000/airports
 Content-Type: application/json
 
 {
-  "name": "Vienna International Airport",
-  "iataCode": "VIE",
-  "city": "Vienna"
+  "name": "Flughafen Berlin Brandenburg Willy Brandt",
+  "iataCode": "BER",
+  "city": "Berlin"
 }
 
 ### ============ CREATE FLIGHT ============
@@ -66,9 +66,9 @@ Content-Type: application/json
   "flightNumber": "OS123",
   "departureTime": "2025-12-01T10:00:00Z",
   "arrivalTime": "2025-12-01T12:00:00Z",
-  "originId": "REPLACE_WITH_AIRPORT_ID",
-  "destinationId": "REPLACE_WITH_DIFFERENT_AIRPORT_ID",
-  "planeId": "REPLACE_WITH_PLANE_ID"
+  "originId": "16b8146e-af12-4ad2-a147-d1ff55d857fd",
+  "destinationId": "274fa00b-59bf-4839-94f4-cf54c82408f7",
+  "planeId": "f6ce9518-e973-4c23-bac9-109c262e1738"
 }
 
 ### ============ BOOK PASSENGERS ============
@@ -79,7 +79,7 @@ Content-Type: application/json
 
 {
   "passengerIds": [
-    "REPLACE_WITH_PASSENGER_ID_1",
-    "REPLACE_WITH_PASSENGER_ID_2"
+    "Passenger_ID_1",
+    "Passenger_ID_2"
   ]
 }
