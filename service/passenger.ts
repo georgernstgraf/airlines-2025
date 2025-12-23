@@ -14,6 +14,9 @@ export async function createPassenger(data: {
     return await passengerRepo.create(data);
 }
 
+export async function findMany() {
+    return await passengerRepo.findMany();
+}
 export async function createManyPassengers(data: Array<{
     firstName: string;
     lastName: string;
@@ -53,19 +56,22 @@ export async function updatePassenger(
     });
 }
 
+export async function count() {
+    return await passengerRepo.count();
+}
 export async function deletePassenger(id: string) {
     const { prisma } = await import("../Repository/db.ts");
-    
+
     // Prüfe ob Passagier noch auf Flügen gebucht ist
     const passengerFlights = await prisma.passenger.findUnique({
         where: { id },
         select: { _count: { select: { flights: true } } }
     });
-    
+
     if ((passengerFlights?._count.flights ?? 0) > 0) {
         throw new Error("Cannot delete passenger with active flight bookings");
     }
-    
+
     return await prisma.passenger.delete({ where: { id } });
 }
 

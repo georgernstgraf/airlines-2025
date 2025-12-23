@@ -1,4 +1,5 @@
 import * as flightRepo from "../Repository/flight.ts";
+import { faker } from "@faker-js/faker";
 
 export async function createFlight(data: {
     flightNumber: string;
@@ -21,6 +22,23 @@ export async function createFlight(data: {
     return await flightRepo.create(data);
 }
 
+export async function count() {
+    return await flightRepo.count();
+}
+export async function findMany() {
+    return await flightRepo.findMany();
+}
+export async function regenerateAllIds() {
+    const ids = await flightRepo.allIds();
+    ids.map(async (id) => {
+        const newFlightNumber = `${faker.airline.airline().iataCode}${faker.airline.flightNumber({ addLeadingZeros: true })}`; // 'AA0798'
+        await flightRepo.update(id, { flightNumber: newFlightNumber });
+    })
+}
+
+export async function findById(id: string) {
+    return await flightRepo.findById(id);
+}
 export async function createManyFlights(data: Array<{
     flightNumber: string;
     departureTime: Date;
@@ -48,7 +66,7 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     // Business-Logik: Prüfe ob Flight existiert und hole Plane-Kapazität
     const flights = await flightRepo.findMany();
     const flight = flights.find(f => f.id === flightId);
-    
+
     if (!flight) {
         throw new Error("Flight not found");
     }
@@ -86,15 +104,15 @@ export async function updateFlight(
     if (data.departureTime || data.arrivalTime) {
         const flight = await flightRepo.findById(id);
         if (!flight) throw new Error("Flight not found");
-        
+
         const departure = data.departureTime || flight.departureTime;
         const arrival = data.arrivalTime || flight.arrivalTime;
-        
+
         if (departure >= arrival) {
             throw new Error("Departure time must be before arrival time");
         }
     }
-    
+
     // Validiere Ursprung != Ziel
     if (data.originId && data.destinationId && data.originId === data.destinationId) {
         throw new Error("Origin and destination must be different");
@@ -110,34 +128,34 @@ export async function updateFlight(
 
 export async function deleteFlight(id: string) {
     const { prisma } = await import("../Repository/db.ts");
-    
+
     // Prüfe ob Passagiere gebucht sind
     const passengersCount = await prisma.flight.findUnique({
         where: { id },
         select: { _count: { select: { passengers: true } } }
     });
-    
+
     if ((passengersCount?._count.passengers ?? 0) > 0) {
         throw new Error("Cannot delete flight with booked passengers");
     }
-    
+
     return await prisma.flight.delete({ where: { id } });
 }
 
 export async function getFlightCapacity(flightId: string) {
     const flight = await flightRepo.findById(flightId);
     if (!flight) throw new Error("Flight not found");
-    
+
     const { prisma } = await import("../Repository/db.ts");
     const passengerCount = await prisma.flight.findUnique({
         where: { id: flightId },
         select: { _count: { select: { passengers: true } } }
     });
-    
+
     const capacity = flight.plane.capacity;
     const booked = passengerCount?._count.passengers ?? 0;
     const available = capacity - booked;
-    
+
     return {
         capacity,
         booked,

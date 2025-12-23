@@ -42,7 +42,7 @@ if (planes_to_create > 0) {
 
 // ensure airports (no deps)
 console.log(`Ensuring ${ensureAirports} airports...`);
-let  airports_to_create = ensureAirports - await airportService.count();
+let airports_to_create = ensureAirports - await airportService.count();
 while (airports_to_create > 0) {
     const fake_airport = faker.airline.airport();
     const airportData = {
@@ -89,7 +89,7 @@ if (flights_to_create > 0) {
         const plane = planes[faker.number.int({ min: 0, max: planes.length - 1 })];
 
         return {
-            flightNumber: faker.airline.flightNumber(),
+            flightNumber: `${faker.airline.airline().iataCode}${faker.airline.flightNumber({ addLeadingZeros: true })}`, // 'AA0798'
             departureTime: departure,
             arrivalTime: arrival,
             originId: origin.id,
@@ -99,6 +99,9 @@ if (flights_to_create > 0) {
     });
     await flightService.createManyFlights(flightData);
     console.log(`  Created ${flights_to_create} flights`);
+} else {
+    console.log(`  No new flights needed, reassigning flight numbers...`);
+    await flightService.regenerateAllIds();
 }
 
 // assign passengers to flights
@@ -108,7 +111,7 @@ const allPassengers = await passengerService.findMany();
 
 console.log(`Found ${allFlights.length} flights and ${allPassengers.length} passengers`);
 
-if (allFlights.length > 0 && allPassengers.length > 0) {
+if (allFlights.length > 0 && allPassengers.length > 0) {  // so only do this if we have both
     let assignedCount = 0;
     for (const f of allFlights) {
         // Random number of passengers per flight (0 to 50)
