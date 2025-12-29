@@ -6,7 +6,8 @@ export async function createPassenger(data: {
     email: string;
 }) {
     // Business-Logik: Email-Validierung
-    if (!data.email.includes("@")) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
         throw new Error("Invalid email format");
     }
 
@@ -23,8 +24,9 @@ export async function createManyPassengers(data: Array<{
     email: string;
 }>) {
     // Validiere alle Emails
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     for (const passenger of data) {
-        if (!passenger.email.includes("@")) {
+        if (!emailRegex.test(passenger.email)) {
             throw new Error(`Invalid email format: ${passenger.email}`);
         }
     }
@@ -44,8 +46,11 @@ export async function updatePassenger(
     }>
 ) {
     // Validiere Email, falls übergeben
-    if (data.email && !data.email.includes("@")) {
-        throw new Error("Invalid email format");
+    if (data.email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.email)) {
+            throw new Error("Invalid email format");
+        }
     }
 
     const { prisma } = await import("../Repository/db.ts");
@@ -92,13 +97,12 @@ export async function findPassengerByEmail(email: string) {
 
 export async function searchPassengersByName(firstName: string, lastName?: string) {
     const { prisma } = await import("../Repository/db.ts");
+    const where: { firstName: { contains: string }; lastName?: { contains: string } } = { firstName: { contains: firstName } };
+    if (lastName) {
+        where.lastName = { contains: lastName };
+    }
     return await prisma.passenger.findMany({
-        where: {
-            AND: [
-                { firstName: { contains: firstName } },
-                lastName ? { lastName: { contains: lastName } } : {}
-            ]
-        },
+        where,
         include: { flights: true },
         orderBy: [{ lastName: "asc" }, { firstName: "asc" }]
     });
