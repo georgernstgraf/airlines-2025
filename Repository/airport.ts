@@ -49,3 +49,25 @@ export async function delete_(id: string) {
         where: { id }
     });
 }
+
+// SEARCH
+export async function searchByCity(city: string) {
+    return await prisma.airport.findMany({
+        where: {
+            city: {
+                contains: city,
+                mode: "insensitive"
+            }
+        }
+    });
+}
+
+export async function findById(id: string) {
+    return await prisma.airport.findUnique({
+        where: { id },
+        include: {
+            departingFlights: true,
+            arrivingFlights: true,
+        }
+    });
+}
