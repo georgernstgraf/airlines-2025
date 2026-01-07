@@ -1,25 +1,30 @@
 {
-    "tasks": {
-        "pg": "deno run -A prisma generate",
-        "pv": "deno run -A prisma validate",
-        "pmd": "deno run -A --env-file prisma migrate dev",
-        "seed": "deno run -A --env-file seed.ts",
-        "dev": "deno run -A --env-file --watch main.ts"
-    },
-    "imports": {
-        "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
-        "@prisma/client": "npm:@prisma/client@^6.18.0",
-        "@std/assert": "jsr:@std/assert@1",
-        "@types/node": "npm:@types/node@^24.2.0",
-        "he": "npm:he@^1.2.0",
-        "hono": "jsr:@hono/hono@^4.6.16",
-        "prisma": "npm:prisma@^6.18.0",
-        "model": "./prisma/client/client.ts"
-    },
-    "fmt": {
-        "indentWidth": 4,
-        "lineWidth": 130,
-        "singleQuote": false,
-        "proseWrap": "never"
-    }
+  "tasks": {
+    "pg": "deno run -A prisma generate",
+    "pv": "deno run -A prisma validate",
+    "pmd": "deno run -A --env-file prisma migrate dev",
+    "migrate:status": "deno -A prisma migrate status",
+    "migrate:reset": "deno -A prisma migrate reset",
+    "seed": "deno run -A --env-file seed.ts",
+    "check": "deno check",
+    "studio": "deno -A --env-file prisma studio",
+    "dev": "deno run -A --env-file --watch main.ts",
+    "server": "deno -A --env-file main.ts"
+  },
+  "imports": {
+    "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
+    "@prisma/client": "npm:@prisma/client@^6.18.0",
+    "@std/assert": "jsr:@std/assert@1",
+    "@types/node": "npm:@types/node@^24.2.0",
+    "he": "npm:he@^1.2.0",
+    "hono": "jsr:@hono/hono@^4.6.16",
+    "prisma": "npm:prisma@^6.18.0",
+    "model": "./prisma/client/client.ts"
+  },
+  "fmt": {
+    "indentWidth": 4,
+    "lineWidth": 130,
+    "singleQuote": false,
+    "proseWrap": "never"
+  }
 }
