@@ -1,5 +1,6 @@
 import * as flightRepo from "../Repository/flight.ts";
 import { faker } from "@faker-js/faker";
+import  { prisma } from "../Repository/db.ts";
 
 export async function createFlight(data: {
     flightNumber: string;
@@ -30,10 +31,10 @@ export async function findMany() {
 }
 export async function regenerateAllIds() {
     const ids = await flightRepo.allIds();
-    ids.map(async (id) => {
+    await Promise.all(ids.map(async (id) => {
         const newFlightNumber = `${faker.airline.airline().iataCode}${faker.airline.flightNumber({ addLeadingZeros: true })}`; // 'AA0798'
         await flightRepo.update(id, { flightNumber: newFlightNumber });
-    })
+    }));
 }
 
 export async function findById(id: string) {
@@ -64,8 +65,10 @@ export async function createManyFlights(data: Array<{
 
 export async function bookPassengersToFlight(flightId: string, passengerIds: string[]) {
     // Business-Logik: Prüfe ob Flight existiert und hole Plane-Kapazität
-    const flights = await flightRepo.findMany();
-    const flight = flights.find(f => f.id === flightId);
+    const { prisma } = await import("../Repository/db.ts");
+    const flight = await prisma.flight.findUnique({
+        where: { id: flightId }
+    });
 
     if (!flight) {
         throw new Error("Flight not found");
@@ -78,7 +81,6 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     // }
 
     // Delegiere an Prisma (direkt, da assignPassenger im Repo nicht exportiert wird)
-    const { prisma } = await import("../Repository/db.ts");
     return await prisma.flight.update({
         where: { id: flightId },
         data: {
