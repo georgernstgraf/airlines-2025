@@ -1,10 +1,39 @@
-# AirlinesLioJakob
+# Airlines - Flug-Buchungssystem
 
-This template should help get you started developing with Vue 3 in Vite.
+Eine Vue.js-basierte Webanwendung zum Suchen und Buchen von Flügen.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+✈️ **Funktionalität:**
+- Homepage mit Willkommensbereich und FAQs
+- Flüge suchen mit Filterung nach Abflugort, Zielort, Datum und Passagiere
+- Flüge buchen mit Passagier- und Zahlungsinformationen
+- Responsive Navigationsleiste
+- Vollständige Validierungen und Fehlerbehandlung
+
+## Installation und Ausführung
+
+### Installation
+```bash
+npm install
+```
+
+### Entwicklungsserver
+```bash
+npm run dev
+```
+
+### Build
+```bash
+npm run build
+```
+
+## Technologie-Stack
+- Vue.js 3
+- Vue Router 4
+- Vite
+- JavaScript (ES6+)
+
 
 ## Recommended Browser Setup
 

@@ -1,16 +1,19 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@hono/hono@^4.6.16": "4.11.1",
     "jsr:@std/assert@1": "1.0.15",
     "jsr:@std/internal@^1.0.12": "1.0.12",
     "npm:@faker-js/faker@^10.1.0": "10.1.0",
     "npm:@prisma/client@^6.18.0": "6.18.0_prisma@6.16.2",
     "npm:he@^1.2.0": "1.2.0",
-    "npm:hono@^4.10.6": "4.10.6",
     "npm:prisma@^6.18.0": "6.18.0",
     "npm:prisma@latest": "6.16.2"
   },
   "jsr": {
+    "@hono/hono@4.11.1": {
+      "integrity": "28bb28c7322a1379e7132af05ef76aef09f86bb8cdd7077c67e004dea288ac0d"
+    },
     "@std/assert@1.0.15": {
       "integrity": "d64018e951dbdfab9777335ecdb000c0b4e3df036984083be219ce5941e4703b",
       "dependencies": [
@@ -205,9 +208,6 @@
       "integrity": "sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==",
       "bin": true
     },
-    "hono@4.10.6": {
-      "integrity": "sha512-BIdolzGpDO9MQ4nu3AUuDwHZZ+KViNm+EZ75Ae55eMXMqLVhDFqEMXxtUe9Qh8hjL+pIna/frs2j6Y2yD5Ua/g=="
-    },
     "jiti@2.6.0": {
       "integrity": "sha512-VXe6RjJkBPj0ohtqaO8vSWP3ZhAKo66fKrFNCll4BTcwljPLz03pCbaNKfzGP5MbrCYcbJ7v0nOYYwUzTEIdXQ==",
       "bin": true
@@ -280,11 +280,12 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@hono/hono@^4.6.16",
       "jsr:@std/assert@1",
       "npm:@faker-js/faker@^10.1.0",
       "npm:@prisma/client@^6.18.0",
+      "npm:@types/node@^24.2.0",
       "npm:he@^1.2.0",
-      "npm:hono@^4.10.6",
       "npm:prisma@^6.18.0"
     ]
   }
