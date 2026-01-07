@@ -1,5 +1,6 @@
 import * as flightRepo from "../Repository/flight.ts";
 import { faker } from "@faker-js/faker";
+import  { prisma } from "../Repository/db.ts";
 
 export async function createFlight(data: {
     flightNumber: string;
