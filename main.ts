@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { serveStatic } from "hono/deno";
 import * as passengerService from "./service/passenger.ts";
 import * as planeService from "./service/plane.ts";
 import * as airportService from "./service/airport.ts";
@@ -71,6 +72,12 @@ app.post('/flights/:id/passengers', async (c) => {
         return c.json({ error: (e as Error).message }, 400);
     }
 });
+
+app.use("/static/*", 
+    serveStatic({
+    root: "../static",
+})
+);
 
 Deno.serve({ port: 3000 }, app.fetch);
 console.log('🚀 http://localhost:3000');
