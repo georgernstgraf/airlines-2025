@@ -14,6 +14,10 @@ export async function count() {
 export async function findMany() {
     return await prisma.flight.findMany();
 }
+export async function allIds() {
+    const flights = await prisma.flight.findMany({ select: { id: true } });
+    return flights.map(f => f.id);
+}
 
 export async function findManyWithRelations() {
     return await prisma.flight.findMany({
@@ -50,6 +54,7 @@ export async function findByFlightNumber(flightNumber: string) {
     });
 }
 
+
 // UPDATE
 export async function update(id: string, data: Prisma.FlightUpdateInput) {
     return await prisma.flight.update({
@@ -58,9 +63,7 @@ export async function update(id: string, data: Prisma.FlightUpdateInput) {
     });
 }
 
-export async function assignPassenger(id: string, data: Prisma.FlightUpdateInput) {
-    return await prisma.flight.update({ where: { id }, data });
-}
+// UPDATE
 
 // DELETE
 export async function delete_(id: string) {
