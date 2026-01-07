@@ -1,5 +1,12 @@
 # airlines-2025
 
-## Fertige Datenbank zum Download
+## VOR PULL REQUEST
 
-<https://grafg1.spengergasse.at/grg/airlines.db>
+In meinem Feature Branch:
+
+`git pull origin main`
+
+## Seeding
+
+- `deno task seed`
+
