@@ -50,36 +50,15 @@ export async function updatePlane(
         }
     }
 
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.plane.update({
-        where: { id },
-        data,
-        include: { flights: { select: { id: true, flightNumber: true } } }
-    });
+    return await planeRepo.update(id, data);
 }
 
 export async function deletePlane(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
-
-    // Prüfe ob noch Flüge mit diesem Flugzeug existieren
-    const flightCount = await prisma.plane.findUnique({
-        where: { id },
-        select: { _count: { select: { flights: true } } }
-    });
-
-    if ((flightCount?._count.flights ?? 0) > 0) {
-        throw new Error("Cannot delete plane with assigned flights");
-    }
-
-    return await prisma.plane.delete({ where: { id } });
+    return await planeRepo.delete(id);
 }
 
 export async function findPlaneById(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.plane.findUnique({
-        where: { id },
-        include: { flights: { select: { id: true, flightNumber: true, departureTime: true } } }
-    });
+    return await planeRepo.findById(id);
 }
 
 export async function getAll() {
@@ -90,11 +69,7 @@ export async function findPlanesByModel(model: string) {
     return await prisma.plane.findMany({
         where: { model: { contains: model } },
         include: { _count: { select: { flights: true } } }
-    });
-}
-
-export async function getPlaneStatistics(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
+    return await planeRepo.findByModel(modelonst { prisma } = await import("../Repository/db.ts");
     const plane = await prisma.plane.findUnique({
         where: { id },
         include: {
@@ -102,27 +77,4 @@ export async function getPlaneStatistics(id: string) {
                 select: {
                     id: true,
                     _count: { select: { passengers: true } }
-                }
-            }
-        }
-    });
-
-    if (!plane) throw new Error("Plane not found");
-
-    const totalFlights = plane.flights.length;
-    const totalPassengers = plane.flights.reduce((sum, f) => sum + (f._count?.passengers ?? 0), 0);
-    const avgPassengersPerFlight = totalFlights > 0 ? totalPassengers / totalFlights : 0;
-    const utilizationRate = totalFlights > 0
-        ? (totalPassengers / (plane.capacity * totalFlights)) * 100
-        : 0;
-
-    return {
-        id: plane.id,
-        model: plane.model,
-        capacity: plane.capacity,
-        totalFlights,
-        totalPassengers,
-        avgPassengersPerFlight: Math.round(avgPassengersPerFlight * 100) / 100,
-        utilizationRate: Math.round(utilizationRate * 100) / 100
-    };
-}
+    return await planeRepo.getStatistics(id)
