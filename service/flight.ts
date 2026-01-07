@@ -1,5 +1,6 @@
 import * as flightRepo from "../Repository/flight.ts";
 import { faker } from "@faker-js/faker";
+import  { prisma } from "../Repository/db.ts";
 
 export async function createFlight(data: {
     flightNumber: string;
@@ -80,7 +81,6 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     // }
 
     // Delegiere an Prisma (direkt, da assignPassenger im Repo nicht exportiert wird)
-    const { prisma } = await import("../Repository/db.ts");
     return await prisma.flight.update({
         where: { id: flightId },
         data: {
