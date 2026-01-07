@@ -4,14 +4,10 @@ import { serveStatic } from "hono/deno";
 const app = new Hono();
 
 app.use(
-    "/*",
+    "/static/*",
     serveStatic({
-        root: "./",
-    }),
-    (c, next) => {
-        console.log("Static files served");
-        return next();
-    }
+        root: "./static",
+    })
 );
 
 Deno.serve(app.fetch);
