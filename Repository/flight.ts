@@ -4,11 +4,15 @@ import { prisma } from "./db.ts"
 export async function count() {
     return await prisma.flight.count();
 }
-export async function create(data:Prisma.FlightCreateArgs["data"]) {
-    return await prisma.flight.create({data});
+export async function create(data: Prisma.FlightCreateArgs["data"]) {
+    return await prisma.flight.create({ data });
 }
 export async function findMany() {
     return await prisma.flight.findMany();
+}
+export async function allIds() {
+    const flights = await prisma.flight.findMany({ select: { id: true } });
+    return flights.map(f => f.id);
 }
 
 export async function findManyWithRelations() {
@@ -34,6 +38,6 @@ export async function findById(id: string) {
     });
 }
 
-export async function assignPassenger(id: string, data: Prisma.FlightUpdateInput) {
+export async function update(id: string, data: Prisma.FlightUpdateInput) {
     return await prisma.flight.update({ where: { id }, data });
 }
