@@ -28,6 +28,9 @@ export async function count() {
 export async function findMany() {
     return await flightRepo.findMany();
 }
+export async function findManyWithRelations() {
+    return await flightRepo.findManyWithRelations();
+}
 export async function regenerateAllIds() {
     const ids = await flightRepo.allIds();
     await Promise.all(ids.map(async (id) => {
@@ -80,7 +83,6 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     // }
 
     // Delegiere an Prisma (direkt, da assignPassenger im Repo nicht exportiert wird)
-    const { prisma } = await import("../Repository/db.ts");
     return await prisma.flight.update({
         where: { id: flightId },
         data: {

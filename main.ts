@@ -42,9 +42,9 @@ app.post('/airports', async (c) => {
 
 // Flights
 app.get('/flights', async (c) => {
-    const withRelations = c.req.query('include');
-    if (withRelations) {
-        return c.json(await flightService.findMany());  // TODO with relations
+    const include = c.req.query('include');
+    if (include === 'relations') {
+        return c.json(await flightService.findManyWithRelations());
     }
     return c.json(await flightService.findMany());
 });
