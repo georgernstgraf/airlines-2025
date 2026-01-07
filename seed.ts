@@ -41,7 +41,7 @@ const realAirports = [
     { name: "Athens International", iataCode: "ATH", city: "Athens" },
     { name: "Istanbul Airport", iataCode: "IST", city: "Istanbul" },
     { name: "Doha Hamad", iataCode: "DOH", city: "Doha" },
-    { name: "Dubai International", iataCode: "DXB", city: "Dubai" }
+    { name: "Dubai International", iataCode: "DXB", city: "Dubai" },
 ];
 const ensureAirports = realAirports.length;
 
@@ -58,21 +58,6 @@ await prisma.plane.deleteMany();
 // ensure passengers (no deps)
 console.log(`Ensuring ${ensurePassengers} passengers...`);
 const passengers_to_create = ensurePassengers - await passengerService.count();
-<<<<<<< HEAD
-if (passengers_to_create > 0) {
-    const timestamp = Date.now();
-    const passengerData = Array.from({ length: passengers_to_create }, (_, idx) => {
-        // Force unique email by using deterministic suffix to avoid unique constraint errors
-        const localPart = faker.internet.username().replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'user';
-        return {
-            firstName: faker.person.firstName(),
-            lastName: faker.person.lastName(),
-            email: `${localPart}.seed${timestamp}-${idx}@air.example.com`,
-        };
-    });
-    await passengerService.createManyPassengers(passengerData);
-    console.log(`  Created ${passengers_to_create} passengers (duplicates skipped)`);
-=======
 let passengers_created = 0;
 while (passengers_created < passengers_to_create) {
     try {
@@ -85,7 +70,6 @@ while (passengers_created < passengers_to_create) {
     } catch (e) {
         console.error(`Error creating passenger:`, (e as Error).message);
     }
->>>>>>> c0279c692e1bb59b061e848ba2dba8dd2770d970
 }
 // ensure planes (no deps)
 console.log(`Ensuring ${ensurePlanes} planes...`);
@@ -101,12 +85,6 @@ if (planes_to_create > 0) {
 
 // ensure airports (no deps, real list)
 console.log(`Ensuring ${ensureAirports} airports...`);
-<<<<<<< HEAD
-const airports_to_create = ensureAirports - await airportService.count();
-if (airports_to_create > 0) {
-    await airportService.createManyAirports(realAirports.slice(0, airports_to_create));
-    console.log(`  Inserted ${airports_to_create} real airports`);
-=======
 let airports_to_create = ensureAirports - await airportService.count();
 while (airports_to_create > 0) {
     const fake_airport = faker.airline.airport();
@@ -122,7 +100,6 @@ while (airports_to_create > 0) {
         console.log(`  Skipping duplicate airport: ${airportData.iataCode}`);
     }
     console.log(`  Created airports (duplicates skipped)`);
->>>>>>> c0279c692e1bb59b061e848ba2dba8dd2770d970
 }
 
 // ensure flights (depends on airport, plane)
@@ -177,7 +154,7 @@ const allPassengers = await passengerService.findMany();
 
 console.log(`Found ${allFlights.length} flights and ${allPassengers.length} passengers`);
 
-if (allFlights.length > 0 && allPassengers.length > 0) {  // so only do this if we have both
+if (allFlights.length > 0 && allPassengers.length > 0) { // so only do this if we have both
     let assignedCount = 0;
     for (const f of allFlights) {
         // Random number of passengers per flight (0 to 50)
