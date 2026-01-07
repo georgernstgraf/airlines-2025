@@ -4,10 +4,10 @@ import { serveStatic } from "hono/deno";
 const app = new Hono();
 
 app.use(
-    "/static/*",
+    "/*",
     serveStatic({
         root: "./static",
     })
 );
 
-Deno.serve(app.fetch);
+Deno.serve({ port: 3001 }, app.fetch);
