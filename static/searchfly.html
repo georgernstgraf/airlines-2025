@@ -1,6 +1,10 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
-    <title>Flüge Suchen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Suchen Sie nach verfügbaren Flügen zu Ihrem Wunschziel">
+    <title>Flüge Suchen | Finden Sie Ihren perfekten Flug</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="abfluge.png" type="image/x-icon">
 </head>
@@ -25,8 +29,8 @@
 <main class="main-content">
   <section class="search-section">
     <div class="container">
-      <h1>Flüge suchen</h1>
-      <p>Finden Sie verfügbare Flüge zu Ihrem Wunschziel</p>
+      <h1>🔍 Flüge suchen</h1>
+      <p>Finden Sie verfügbare Flüge zu Ihrem Wunschziel - Über 1000 Destinationen weltweit</p>
       
       <div class="search-form">
         <div class="form-row">
@@ -72,12 +76,66 @@
           </div>
         </div>
         
-        <button class="btn btn-primary btn-search">Flüge suchen</button>
+        <button class="btn btn-primary btn-search">🔍 Flüge suchen</button>
+      </div>
+
+      <div id="searchResults" style="margin-top: 3rem;">
+        <!-- Beispiel-Suchergebnisse -->
+        <h2 style="margin-bottom: 2rem;">Gefundene Flüge</h2>
+        <div class="flight-results">
+          <div class="flight-card">
+            <div class="flight-header">
+              <div>
+                <h3>München → Berlin</h3>
+                <p style="color: #666; margin: 0.5rem 0 0 0;">Lufthansa • LH 1234</p>
+              </div>
+              <div class="flight-price">€89</div>
+            </div>
+            <div class="flight-details">
+              <div class="flight-time">
+                <strong style="font-size: 1.5rem;">08:00</strong>
+                <span style="color: #666;">MUC</span>
+              </div>
+              <div class="flight-duration">
+                <span style="color: #666;">1h 15m</span>
+                <div class="flight-line" style="width: 100px;"></div>
+              </div>
+              <div class="flight-time">
+                <strong style="font-size: 1.5rem;">09:15</strong>
+                <span style="color: #666;">BER</span>
+              </div>
+              <a href="bookfly.html" class="btn btn-primary">Buchen</a>
+            </div>
+          </div>
+          <div class="flight-card">
+            <div class="flight-header">
+              <div>
+                <h3>München → Berlin</h3>
+                <p style="color: #666; margin: 0.5rem 0 0 0;">Eurowings • EW 5678</p>
+              </div>
+              <div class="flight-price">€75</div>
+            </div>
+            <div class="flight-details">
+              <div class="flight-time">
+                <strong style="font-size: 1.5rem;">14:30</strong>
+                <span style="color: #666;">MUC</span>
+              </div>
+              <div class="flight-duration">
+                <span style="color: #666;">1h 20m</span>
+                <div class="flight-line" style="width: 100px;"></div>
+              </div>
+              <div class="flight-time">
+                <strong style="font-size: 1.5rem;">15:50</strong>
+                <span style="color: #666;">BER</span>
+              </div>
+              <a href="bookfly.html" class="btn btn-primary">Buchen</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
-
-  
+</main>
 
 <footer class="main-footer">
   <div class="container">
