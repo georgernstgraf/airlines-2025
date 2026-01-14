@@ -55,3 +55,48 @@ export async function delete_(id: string) {
         where: { id }
     });
 }
+
+// SEARCH & STATISTICS
+export async function findByModel(model: string) {
+    return await prisma.plane.findMany({
+        where: {
+            model: {
+                contains: model
+            }
+        },
+        include: {
+            _count: { select: { flights: true } }
+        }
+    });
+}
+
+export async function getStatistics(id: string) {
+    const plane = await prisma.plane.findUnique({
+        where: { id },
+        include: {
+            flights: {
+                select: {
+                    id: true,
+                    passengers: { select: { id: true } }
+                }
+            }
+        }
+    });
+
+    if (!plane) {
+        return null;
+    }
+
+    const totalPassengers = plane.flights.reduce((sum, flight) => sum + flight.passengers.length, 0);
+    const averagePassengersPerFlight = plane.flights.length > 0 ? totalPassengers / plane.flights.length : 0;
+
+    return {
+        id: plane.id,
+        model: plane.model,
+        capacity: plane.capacity,
+        totalFlights: plane.flights.length,
+        totalPassengers,
+        averagePassengersPerFlight,
+        utilization: ((totalPassengers / (plane.capacity * plane.flights.length)) * 100).toFixed(2) + "%"
+    };
+}
