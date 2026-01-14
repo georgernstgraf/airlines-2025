@@ -14,10 +14,6 @@ export async function count() {
 export async function findMany() {
     return await prisma.flight.findMany();
 }
-export async function allIds() {
-    const flights = await prisma.flight.findMany({ select: { id: true } });
-    return flights.map(f => f.id);
-}
 
 export async function findManyWithRelations() {
     return await prisma.flight.findMany({

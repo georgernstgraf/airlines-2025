@@ -55,7 +55,7 @@ export async function updateAirport(
 }
 
 export async function deleteAirport(id: string) {
-    return await airportRepo.delete(id);
+    return await airportRepo.delete_(id);
 }
 
 export async function findAirportById(id: string) {
@@ -63,11 +63,17 @@ export async function findAirportById(id: string) {
 }
 
 export async function findAirportByIataCode(iataCode: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.airport.findUnique({
-        where: { iataCode }
-    });
+    return await airportRepo.getByIataCode(iataCode);
 }
 
 export async function searchAirportsByCity(city: string) {
-    return await airportRepo.searchByCity(cityt { count, getAll } from "../Repository/airport.ts";
+    return await airportRepo.searchByCity(city);
+}
+
+export async function getAirportCount() {
+    return await airportRepo.count();
+}
+
+export async function getAllAirports() {
+    return await airportRepo.getAll();
+}

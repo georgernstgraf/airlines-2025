@@ -55,8 +55,7 @@ export async function searchByCity(city: string) {
     return await prisma.airport.findMany({
         where: {
             city: {
-                contains: city,
-                mode: "insensitive"
+                contains: city
             }
         }
     });

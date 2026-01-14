@@ -61,8 +61,7 @@ export async function findByModel(model: string) {
     return await prisma.plane.findMany({
         where: {
             model: {
-                contains: model,
-                mode: "insensitive"
+                contains: model
             }
         },
         include: {

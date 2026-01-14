@@ -59,17 +59,15 @@ export async function delete_(id: string) {
 
 // SEARCH
 export async function searchByName(firstName: string, lastName?: string) {
-    const where: any = {
+    const where: Prisma.PassengerWhereInput = {
         firstName: {
-            contains: firstName,
-            mode: "insensitive"
+            contains: firstName
         }
     };
     
     if (lastName) {
         where.lastName = {
-            contains: lastName,
-            mode: "insensitive"
+            contains: lastName
         };
     }
     
