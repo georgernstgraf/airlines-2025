@@ -1,4 +1,5 @@
 {
+  "nodeModulesDir": "auto",
   "tasks": {
     "pg": "deno run -A prisma generate",
     "pv": "deno run -A prisma validate",
