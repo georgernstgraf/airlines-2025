@@ -30,11 +30,9 @@ export async function count() {
 export async function findMany() {
     return await flightRepo.findMany();
 }
-
 export async function findManyWithRelations() {
     return await flightRepo.findManyWithRelations();
 }
-
 export async function regenerateAllIds() {
     const ids = await flightRepo.allIds();
     await Promise.all(ids.map(async (id) => {
