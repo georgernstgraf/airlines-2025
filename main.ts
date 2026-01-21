@@ -31,7 +31,7 @@ app.post('/planes', async (c) => {
 });
 
 // Airports
-app.get('/airports', async (c) => c.json(await airportService.getAll()));
+app.get('/airports', async (c) => c.json(await airportService.getAllAirports()));
 app.post('/airports', async (c) => {
     try {
         return c.json(await airportService.createAirport(await c.req.json()), 201);

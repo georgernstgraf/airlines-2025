@@ -85,7 +85,7 @@ if (planes_to_create > 0) {
 
 // ensure airports (no deps, real list)
 console.log(`Ensuring ${ensureAirports} airports...`);
-let airports_to_create = ensureAirports - await airportService.count();
+let airports_to_create = ensureAirports - await airportService.getAirportCount();
 while (airports_to_create > 0) {
     const fake_airport = faker.airline.airport();
     const airportData = {
@@ -107,7 +107,7 @@ console.log(`Ensuring ${ensureFlights} flights...`);
 const flights_to_create = ensureFlights - await flightService.count();
 
 // Fetch available airports and planes (once!)
-const airports = await airportService.getAll();
+const airports = await airportService.getAllAirports();
 const planes = await planeService.getAll();
 
 if (airports.length < 2) {

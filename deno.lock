@@ -7,14 +7,14 @@
     "npm:@faker-js/faker@^10.1.0": "10.1.0",
     "npm:@prisma/client@^6.18.0": "6.18.0_prisma@6.18.0",
     "npm:@types/node@^24.2.0": "24.10.1",
-    "npm:@vitejs/plugin-vue@^6.0.2": "6.0.3_vite@7.3.1__@types+node@24.10.1__picomatch@4.0.3_vue@3.5.27_@types+node@24.10.1",
+    "npm:@vitejs/plugin-vue@^6.0.3": "6.0.3_vite@7.3.1__@types+node@24.10.1__picomatch@4.0.3_vue@3.5.27_@types+node@24.10.1",
     "npm:he@^1.2.0": "1.2.0",
     "npm:prisma@^6.18.0": "6.18.0",
     "npm:prisma@latest": "6.18.0",
     "npm:vite-plugin-vue-devtools@^8.0.5": "8.0.5_vite@7.3.1__@types+node@24.10.1__picomatch@4.0.3_vue@3.5.27_@types+node@24.10.1",
-    "npm:vite@^7.2.4": "7.3.1_@types+node@24.10.1_picomatch@4.0.3",
+    "npm:vite@^7.3.1": "7.3.1_@types+node@24.10.1_picomatch@4.0.3",
     "npm:vue-router@^4.6.4": "4.6.4_vue@3.5.27",
-    "npm:vue@^3.5.25": "3.5.27"
+    "npm:vue@^3.5.27": "3.5.27"
   },
   "jsr": {
     "@hono/hono@4.10.7": {
@@ -1319,17 +1319,13 @@
       "npm:@faker-js/faker@^10.1.0",
       "npm:@prisma/client@^6.18.0",
       "npm:@types/node@^24.2.0",
+      "npm:@vitejs/plugin-vue@^6.0.3",
       "npm:he@^1.2.0",
-      "npm:prisma@^6.18.0"
-    ],
-    "packageJson": {
-      "dependencies": [
-        "npm:@vitejs/plugin-vue@^6.0.2",
-        "npm:vite-plugin-vue-devtools@^8.0.5",
-        "npm:vite@^7.2.4",
-        "npm:vue-router@^4.6.4",
-        "npm:vue@^3.5.25"
-      ]
-    }
+      "npm:prisma@^6.18.0",
+      "npm:vite-plugin-vue-devtools@^8.0.5",
+      "npm:vite@^7.3.1",
+      "npm:vue-router@^4.6.4",
+      "npm:vue@^3.5.27"
+    ]
   }
 }

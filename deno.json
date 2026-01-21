@@ -5,6 +5,7 @@
     "pv": "deno run -A prisma validate",
     "pmd": "deno run -A --env-file prisma migrate dev",
     "migrate:status": "deno -A prisma migrate status",
+    "pms": "deno -A prisma migrate status",
     "migrate:reset": "deno -A prisma migrate reset",
     "seed": "deno run -A --env-file seed.ts",
     "check": "deno check",
@@ -17,10 +18,15 @@
     "@prisma/client": "npm:@prisma/client@^6.18.0",
     "@std/assert": "jsr:@std/assert@1",
     "@types/node": "npm:@types/node@^24.2.0",
+    "@vitejs/plugin-vue": "npm:@vitejs/plugin-vue@^6.0.3",
     "he": "npm:he@^1.2.0",
     "hono": "jsr:@hono/hono@^4.6.16",
     "prisma": "npm:prisma@^6.18.0",
-    "model": "./prisma/client/client.ts"
+    "model": "./prisma/client/client.ts",
+    "vite": "npm:vite@^7.3.1",
+    "vite-plugin-vue-devtools": "npm:vite-plugin-vue-devtools@^8.0.5",
+    "vue": "npm:vue@^3.5.27",
+    "vue-router": "npm:vue-router@^4.6.4"
   },
   "fmt": {
     "indentWidth": 4,
