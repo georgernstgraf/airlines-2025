@@ -49,14 +49,16 @@ export async function findByFlightNumber(flightNumber: string) {
     return await flightRepo.findByFlightNumber(flightNumber);
 }
 
-export async function createManyFlights(data: Array<{
-    flightNumber: string;
-    departureTime: Date;
-    arrivalTime: Date;
-    originId: string;
-    destinationId: string;
-    planeId: string;
-}>) {
+export async function createManyFlights(
+    data: Array<{
+        flightNumber: string;
+        departureTime: Date;
+        arrivalTime: Date;
+        originId: string;
+        destinationId: string;
+        planeId: string;
+    }>,
+) {
     // Validiere alle Flights
     for (const flight of data) {
         if (flight.departureTime >= flight.arrivalTime) {
@@ -68,7 +70,7 @@ export async function createManyFlights(data: Array<{
     }
 
     // Delegiere an Repository
-    return await Promise.all(data.map(flight => flightRepo.create(flight)));
+    return await Promise.all(data.map((flight) => flightRepo.create(flight)));
 }
 
 export async function bookPassengersToFlight(flightId: string, passengerIds: string[]) {
@@ -84,9 +86,9 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     if (!plane) {
         throw new Error("Plane not found");
     }
-    
+
     const currentPassengers = await flightRepo.getPassengerCount(flightId);
-    
+
     if (currentPassengers + passengerIds.length > plane.capacity) {
         throw new Error("Flight capacity exceeded");
     }
@@ -103,7 +105,7 @@ export async function updateFlight(
         originId: string;
         destinationId: string;
         planeId: string;
-    }>
+    }>,
 ) {
     // Validiere Zeiten, falls übergeben
     if (data.departureTime || data.arrivalTime) {
@@ -132,7 +134,7 @@ export async function deleteFlight(id: string) {
 
 export async function getFlightCapacity(id: string) {
     const flight = await flightRepo.findById(id);
-    
+
     if (!flight) {
         throw new Error("Flight not found");
     }
@@ -151,7 +153,7 @@ export async function getFlightCapacity(id: string) {
         capacity,
         booked,
         available,
-        isFull: available <= 0
+        isFull: available <= 0,
     };
 }
 

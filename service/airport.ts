@@ -18,11 +18,13 @@ export async function createAirport(data: {
     return await airportRepo.create(data);
 }
 
-export async function createManyAirports(data: Array<{
-    name: string;
-    iataCode: string;
-    city: string;
-}>) {
+export async function createManyAirports(
+    data: Array<{
+        name: string;
+        iataCode: string;
+        city: string;
+    }>,
+) {
     // Validiere alle IATA Codes
     for (const airport of data) {
         if (airport.iataCode.length !== 3 || !/^[A-Z]{3}$/.test(airport.iataCode)) {
@@ -42,7 +44,7 @@ export async function updateAirport(
         name: string;
         iataCode: string;
         city: string;
-    }>
+    }>,
 ) {
     // Validiere IATA Code, falls übergeben
     if (data.iataCode) {

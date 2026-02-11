@@ -3,24 +3,30 @@
 ## 🚀 So startest du die Anwendung
 
 ### Terminal 1: Backend starten
+
 ```bash
 cd airlines-2025
 deno run -A --env-file --watch main.ts
 ```
+
 ✅ Backend läuft unter http://localhost:3000
 
 ### Terminal 2: Frontend starten
+
 ```bash
 cd airlines-2025/AirlinesLioJakob
 npm run dev
 ```
+
 ✅ Frontend läuft unter http://localhost:5173
 
 ### Terminal 3: Seed ausführen (nur einmalig!)
+
 ```bash
 cd airlines-2025
 deno run -A --env-file seed.ts
 ```
+
 ✅ 6000 Flüge werden in die Datenbank eingefügt
 
 ---
@@ -53,13 +59,13 @@ deno run -A --env-file seed.ts
 
 ## 🛠️ Troubleshooting
 
-| Problem | Lösung |
-|---------|---------|
-| "Cannot find module" | `npm install` ausführen |
-| "http://localhost:3000 nicht erreichbar" | Backend-Terminal prüfen |
-| "Keine Flüge angezeigt" | `deno run -A --env-file seed.ts` ausführen |
-| "CORS Error" | Frontend-Proxy sollte funktionieren, Backend prüfen |
-| "Datenbank existiert nicht" | `deno run -A --env-file prisma migrate dev` ausführen |
+| Problem                                  | Lösung                                                |
+| ---------------------------------------- | ----------------------------------------------------- |
+| "Cannot find module"                     | `npm install` ausführen                               |
+| "http://localhost:3000 nicht erreichbar" | Backend-Terminal prüfen                               |
+| "Keine Flüge angezeigt"                  | `deno run -A --env-file seed.ts` ausführen            |
+| "CORS Error"                             | Frontend-Proxy sollte funktionieren, Backend prüfen   |
+| "Datenbank existiert nicht"              | `deno run -A --env-file prisma migrate dev` ausführen |
 
 ---
 

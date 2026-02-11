@@ -24,18 +24,17 @@ This document provides essential information for autonomous agents operating in 
 
 Backend tasks are managed via Deno. Use `deno task <task_name>`.
 
-| Task | Command | Description |
-| :--- | :--- | :--- |
-| **dev** | `deno task dev` | Starts the server with hot reload (watch mode). |
-| **pg** | `deno task pg` | Generates the Prisma client. |
-| **pmd** | `deno task pmd` | Runs Prisma migrations (dev). |
-| **seed** | `deno task seed` | Seeds the database with sample data. |
-| **check** | `deno task check` | Performs type checking. |
-| **studio** | `deno task studio` | Opens Prisma Studio to view/edit data. |
-| **server** | `deno task server` | Runs the production server. |
+| Task       | Command            | Description                                     |
+| :--------- | :----------------- | :---------------------------------------------- |
+| **dev**    | `deno task dev`    | Starts the server with hot reload (watch mode). |
+| **pg**     | `deno task pg`     | Generates the Prisma client.                    |
+| **pmd**    | `deno task pmd`    | Runs Prisma migrations (dev).                   |
+| **seed**   | `deno task seed`   | Seeds the database with sample data.            |
+| **check**  | `deno task check`  | Performs type checking.                         |
+| **studio** | `deno task studio` | Opens Prisma Studio to view/edit data.          |
+| **server** | `deno task server` | Runs the production server.                     |
 
-**Tests:**
-Currently, there are no tests in the repository. If adding tests, follow Deno standards:
+**Tests:** Currently, there are no tests in the repository. If adding tests, follow Deno standards:
 
 - File naming: `*.test.ts`.
 - Run all tests: `deno test -A`.
@@ -45,10 +44,10 @@ Currently, there are no tests in the repository. If adding tests, follow Deno st
 
 Frontend tasks use NPM.
 
-| Task | Command | Description |
-| :--- | :--- | :--- |
-| **dev** | `npm run dev` | Starts the Vite development server. |
-| **build** | `npm run build` | Builds the application for production. |
+| Task        | Command           | Description                            |
+| :---------- | :---------------- | :------------------------------------- |
+| **dev**     | `npm run dev`     | Starts the Vite development server.    |
+| **build**   | `npm run build`   | Builds the application for production. |
 | **preview** | `npm run preview` | Previews the production build locally. |
 
 ## 4. Code Style Guidelines
