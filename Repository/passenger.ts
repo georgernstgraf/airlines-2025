@@ -56,3 +56,35 @@ export async function delete_(id: string) {
         where: { id }
     });
 }
+
+// SEARCH
+export async function searchByName(firstName: string, lastName?: string) {
+    const where: Prisma.PassengerWhereInput = {
+        firstName: {
+            contains: firstName
+        }
+    };
+    
+    if (lastName) {
+        where.lastName = {
+            contains: lastName
+        };
+    }
+    
+    return await prisma.passenger.findMany({
+        where,
+        include: { flights: true }
+    });
+}
+
+export async function getFlights(passengerId: string) {
+    return await prisma.passenger.findUnique({
+        where: { id: passengerId },
+        select: {
+            flights: {
+                include: { origin: true, destination: true, plane: true },
+                orderBy: { departureTime: "asc" }
+            }
+        }
+    });
+}
