@@ -21,10 +21,12 @@ export async function count() {
     return await planeRepo.count();
 }
 
-export async function createManyPlanes(data: Array<{
-    model: string;
-    capacity: number;
-}>) {
+export async function createManyPlanes(
+    data: Array<{
+        model: string;
+        capacity: number;
+    }>,
+) {
     // Validiere alle Kapazitäten
     for (const plane of data) {
         if (plane.capacity <= 0 || plane.capacity > 1000) {
@@ -33,7 +35,7 @@ export async function createManyPlanes(data: Array<{
     }
 
     // Delegiere an Repository
-    return await Promise.all(data.map(plane => planeRepo.create(plane)));
+    return await Promise.all(data.map((plane) => planeRepo.create(plane)));
 }
 
 export async function updatePlane(
@@ -41,7 +43,7 @@ export async function updatePlane(
     data: Partial<{
         model: string;
         capacity: number;
-    }>
+    }>,
 ) {
     // Validiere Kapazität, falls übergeben
     if (data.capacity !== undefined) {
@@ -70,5 +72,9 @@ export async function getAllWithFlights() {
 }
 
 export async function findPlanesByModel(model: string) {
-    return await planeRepo.getByModel(model);
+    return await planeRepo.findByModel(model);
+}
+
+export async function getPlaneStatistics(id: string) {
+    return await planeRepo.getStatistics(id);
 }

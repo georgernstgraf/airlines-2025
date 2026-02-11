@@ -1,6 +1,6 @@
 // nur mit diesem Objekt in die Datenbank greifen
 import { Prisma } from "../prisma/client/browser.ts";
-import { prisma } from "./db.ts"
+import { prisma } from "./db.ts";
 
 // CREATE
 export async function create(data: Prisma.PassengerCreateArgs["data"]) {
@@ -20,7 +20,7 @@ export async function findManyWithFlights() {
     return await prisma.passenger.findMany({
         include: {
             flights: true,
-        }
+        },
     });
 }
 
@@ -29,7 +29,7 @@ export async function findById(id: string) {
         where: { id },
         include: {
             flights: true,
-        }
+        },
     });
 }
 
@@ -38,7 +38,7 @@ export async function findByEmail(email: string) {
         where: { email },
         include: {
             flights: true,
-        }
+        },
     });
 }
 
@@ -46,14 +46,14 @@ export async function findByEmail(email: string) {
 export async function update(id: string, data: Prisma.PassengerUpdateInput) {
     return await prisma.passenger.update({
         where: { id },
-        data
+        data,
     });
 }
 
 // DELETE
 export async function delete_(id: string) {
     return await prisma.passenger.delete({
-        where: { id }
+        where: { id },
     });
 }
 
@@ -61,19 +61,19 @@ export async function delete_(id: string) {
 export async function searchByName(firstName: string, lastName?: string) {
     const where: Prisma.PassengerWhereInput = {
         firstName: {
-            contains: firstName
-        }
+            contains: firstName,
+        },
     };
-    
+
     if (lastName) {
         where.lastName = {
-            contains: lastName
+            contains: lastName,
         };
     }
-    
+
     return await prisma.passenger.findMany({
         where,
-        include: { flights: true }
+        include: { flights: true },
     });
 }
 
@@ -83,8 +83,8 @@ export async function getFlights(passengerId: string) {
         select: {
             flights: {
                 include: { origin: true, destination: true, plane: true },
-                orderBy: { departureTime: "asc" }
-            }
-        }
+                orderBy: { departureTime: "asc" },
+            },
+        },
     });
 }
