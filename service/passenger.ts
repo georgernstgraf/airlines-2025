@@ -84,3 +84,6 @@ export async function searchPassengersByName(firstName: string, lastName?: strin
 export async function getPassengerFlights(passengerId: string) {
     return await passengerRepo.getFlights(passengerId);
 }
+export async function findPassengerWithFlights(id: string) {
+    return await passengerRepo.findById(id);
+}
