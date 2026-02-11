@@ -107,7 +107,17 @@ export async function removePassenger(flightId: string, passengerId: string) {
     });
 }
 
-export async function findByDestination(destinationId: string, limit?: number) {
+//flightRepo.findByOrigin(originId);
+
+export async function findByOrigin(originId: string, limit: number = 7) {
+    return await prisma.flight.findMany({
+        where: { originId },
+        include: { origin: true, destination: true, plane: true, passengers: true },
+        take: limit,
+        orderBy: { departureTime: "asc" },
+    });
+}
+export async function findByDestination(destinationId: string, limit: number = 7) {
     return await prisma.flight.findMany({
         where: { destinationId },
         include: { origin: true, destination: true, plane: true, passengers: true },

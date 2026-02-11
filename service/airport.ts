@@ -33,7 +33,7 @@ export async function createManyAirports(
     }
 
     // Delegiere an Repository
-    return await Promise.all(data.map(airport => airportRepo.create(airport)));
+    return await Promise.all(data.map((airport) => airportRepo.create(airport)));
 }
 
 export async function updateAirport(
@@ -66,4 +66,4 @@ export async function findAirportByIataCode(iataCode: string) {
     return await airportRepo.getByIataCode(iataCode);
 }
 
-export { count, getAll } from "../Repository/airport.ts";
+export { count as getAirportCount, getAll as getAllAirports } from "../Repository/airport.ts";

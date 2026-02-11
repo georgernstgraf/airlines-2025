@@ -88,16 +88,20 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     }
 
     const currentPassengers = flight.passengers?.length || 0;
-    
+
     if (currentPassengers + passengerIds.length > plane.capacity) {
-        throw new Error(`Flight capacity exceeded. Current: ${currentPassengers}, Available: ${plane.capacity - currentPassengers}, Requested: ${passengerIds.length}`);
+        throw new Error(
+            `Flight capacity exceeded. Current: ${currentPassengers}, Available: ${
+                plane.capacity - currentPassengers
+            }, Requested: ${passengerIds.length}`,
+        );
     }
 
     // Update flight with new passengers
     return await flightRepo.update(flightId, {
         passengers: {
-            connect: passengerIds.map(id => ({ id }))
-        }
+            connect: passengerIds.map((id) => ({ id })),
+        },
     });
 }
 
@@ -165,12 +169,13 @@ export async function getFlightCapacity(id: string) {
 
 export async function removePassengerFromFlight(flightId: string, passengerId: string) {
     return await flightRepo.removePassenger(flightId, passengerId);
+}
 export async function findFlightsByOrigin(originId: string) {
-    return await flightRepo.findManyWithRelations();
+    return await flightRepo.findByOrigin(originId);
 }
 
 export async function findFlightsByDestination(destinationId: string) {
-    return await flightRepo.findManyWithRelations();
+    return await flightRepo.findByDestination(destinationId);
 }
 
 export async function findFlightsByRoute(originId: string, destinationId: string, limit?: number) {
