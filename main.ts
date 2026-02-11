@@ -13,7 +13,6 @@ app.use('/*', cors());
 app.use('/static/*',
     serveStatic({
         root: './static',
-        index: 'index.html',
     })
 );
 
