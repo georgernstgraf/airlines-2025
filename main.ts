@@ -6,11 +6,31 @@ import * as planeService from "./service/plane.ts";
 import * as airportService from "./service/airport.ts";
 import * as flightService from "./service/flight.ts";
 
-const app = new Hono();
+const app = new Hono();hono static serve
 app.use("/*", cors());
 app.use("/*", serveStatic({ root: "./static" }));
 
-app.get("/", (c) => c.json({ message: "Flight API", version: "1.0" }));
+// Serve static files from ./static under /static/* so API routes are not intercepted
+app.use('/static/*',
+    serveStatic({
+        root: './static',
+        index: 'index.html',
+    })
+);
+
+// Global error handler to log server-side errors for debugging
+app.onError((err, c) => {
+    console.error('Unhandled error:', err);
+    try {
+        return c.json({ error: err?.message ?? 'Internal Server Error' }, 500);
+    } catch (e) {
+        // If even responding fails, log and return a plain Response
+        console.error('Error while sending error response', e);
+        return new Response('Internal Server Error', { status: 500 });
+    }
+});
+
+app.get("/", (c) => c.json({ message: 'Flight API', version: '1.0' }));
 
 // Passengers
 app.get("/passengers", async (c) => c.json(await passengerService.findMany()));
@@ -74,11 +94,7 @@ app.post("/flights/:id/passengers", async (c) => {
     }
 });
 
-app.use("/static/*", 
-    serveStatic({
-    root: "../static",
-})
-);
+// static middleware is mounted above at root
 
 Deno.serve({ port: 3000 }, app.fetch);
 console.log("🚀 http://localhost:3000");
