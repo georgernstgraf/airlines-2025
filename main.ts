@@ -14,7 +14,6 @@ app.use("/*", serveStatic({ root: "./static" }));
 app.use('/static/*',
     serveStatic({
         root: './static',
-        index: 'index.html',
     })
 );
 
