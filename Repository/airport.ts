@@ -1,4 +1,4 @@
-import { Prisma } from "../prisma/client/browser.ts";
+import { Prisma } from "../prisma/client/client.ts";
 import { prisma } from "./db.ts"
 
 // CREATE

@@ -1,4 +1,4 @@
-import { Prisma } from "../prisma/client/browser.ts";
+import { Prisma } from "../prisma/client/client.ts";
 import { prisma } from "./db.ts"
 
 // CREATE
@@ -58,8 +58,6 @@ export async function update(id: string, data: Prisma.FlightUpdateInput) {
         data
     });
 }
-
-// UPDATE
 
 // DELETE
 export async function delete_(id: string) {
