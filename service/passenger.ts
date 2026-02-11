@@ -18,6 +18,11 @@ export async function createPassenger(data: {
 export async function findMany() {
     return await passengerRepo.findMany();
 }
+
+export async function findManyWithFlights() {
+    return await passengerRepo.findManyWithFlights();
+}
+
 export async function createManyPassengers(data: Array<{
     firstName: string;
     lastName: string;
@@ -57,6 +62,7 @@ export async function updatePassenger(
 export async function count() {
     return await passengerRepo.count();
 }
+
 export async function deletePassenger(id: string) {
     return await passengerRepo.delete_(id);
 }

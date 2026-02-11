@@ -26,8 +26,12 @@ export async function createFlight(data: {
 export async function count() {
     return await flightRepo.count();
 }
+
 export async function findMany() {
     return await flightRepo.findMany();
+}
+export async function findManyWithRelations() {
+    return await flightRepo.findManyWithRelations();
 }
 export async function regenerateAllIds() {
     const ids = await flightRepo.allIds();
@@ -40,6 +44,11 @@ export async function regenerateAllIds() {
 export async function findById(id: string) {
     return await flightRepo.findById(id);
 }
+
+export async function findByFlightNumber(flightNumber: string) {
+    return await flightRepo.findByFlightNumber(flightNumber);
+}
+
 export async function createManyFlights(data: Array<{
     flightNumber: string;
     departureTime: Date;

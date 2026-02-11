@@ -20,6 +20,7 @@ export async function createPlane(data: {
 export async function count() {
     return await planeRepo.count();
 }
+
 export async function createManyPlanes(data: Array<{
     model: string;
     capacity: number;
@@ -63,6 +64,11 @@ export async function findPlaneById(id: string) {
 export async function getAll() {
     return await planeRepo.getAll();
 }
+
+export async function getAllWithFlights() {
+    return await planeRepo.getAllWithFlights();
+}
+
 export async function findPlanesByModel(model: string) {
     return await planeRepo.getByModel(model);
 }
