@@ -6,7 +6,8 @@ export async function createPassenger(data: {
     email: string;
 }) {
     // Business-Logik: Email-Validierung
-    if (!data.email.includes("@")) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
         throw new Error("Invalid email format");
     }
 
@@ -14,22 +15,75 @@ export async function createPassenger(data: {
     return await passengerRepo.create(data);
 }
 
-export async function createManyPassengers(data: Array<{
-    firstName: string;
-    lastName: string;
-    email: string;
-}>) {
+export async function findMany() {
+    return await passengerRepo.findMany();
+}
+
+export async function findManyWithFlights() {
+    return await passengerRepo.findManyWithFlights();
+}
+
+export async function createManyPassengers(
+    data: Array<{
+        firstName: string;
+        lastName: string;
+        email: string;
+    }>,
+) {
     // Validiere alle Emails
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     for (const passenger of data) {
-        if (!passenger.email.includes("@")) {
+        if (!emailRegex.test(passenger.email)) {
             throw new Error(`Invalid email format: ${passenger.email}`);
         }
     }
 
-    // Delegiere an Prisma (SQLite unterstützt kein skipDuplicates)
-    // Bei Duplikaten wird der gesamte Batch fehlschlagen
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.passenger.createMany({ data });
+    // Delegiere an Repository
+    return await Promise.all(data.map((passenger) => passengerRepo.create(passenger)));
 }
 
-export { count, findMany } from "../Repository/passenger.ts";
+export async function updatePassenger(
+    id: string,
+    data: Partial<{
+        firstName: string;
+        lastName: string;
+        email: string;
+    }>,
+) {
+    // Validiere Email, falls übergeben
+    if (data.email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.email)) {
+            throw new Error("Invalid email format");
+        }
+    }
+
+    return await passengerRepo.update(id, data);
+}
+
+export async function count() {
+    return await passengerRepo.count();
+}
+
+export async function deletePassenger(id: string) {
+    return await passengerRepo.delete_(id);
+}
+
+export async function findPassengerById(id: string) {
+    return await passengerRepo.findById(id);
+}
+
+export async function findPassengerByEmail(email: string) {
+    return await passengerRepo.findByEmail(email);
+}
+
+export async function searchPassengersByName(firstName: string, lastName?: string) {
+    return await passengerRepo.searchByName(firstName, lastName);
+}
+
+export async function getPassengerFlights(passengerId: string) {
+    return await passengerRepo.getFlights(passengerId);
+}
+export async function findPassengerWithFlights(id: string) {
+    return await passengerRepo.findById(id);
+}

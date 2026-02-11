@@ -18,11 +18,13 @@ export async function createAirport(data: {
     return await airportRepo.create(data);
 }
 
-export async function createManyAirports(data: Array<{
-    name: string;
-    iataCode: string;
-    city: string;
-}>) {
+export async function createManyAirports(
+    data: Array<{
+        name: string;
+        iataCode: string;
+        city: string;
+    }>,
+) {
     // Validiere alle IATA Codes
     for (const airport of data) {
         if (airport.iataCode.length !== 3 || !/^[A-Z]{3}$/.test(airport.iataCode)) {
@@ -30,10 +32,38 @@ export async function createManyAirports(data: Array<{
         }
     }
 
-    // Delegiere an Prisma (SQLite unterstützt kein skipDuplicates)
-    // Bei Duplikaten wird der gesamte Batch fehlschlagen
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.airport.createMany({ data });
+    // Delegiere an Repository
+    return await Promise.all(data.map((airport) => airportRepo.create(airport)));
 }
 
-export { count, getAll } from "../Repository/airport.ts";
+export async function updateAirport(
+    id: string,
+    data: Partial<{
+        name: string;
+        iataCode: string;
+        city: string;
+    }>,
+) {
+    // Validiere IATA Code, falls übergeben
+    if (data.iataCode) {
+        if (data.iataCode.length !== 3 || !/^[A-Z]{3}$/.test(data.iataCode)) {
+            throw new Error("IATA code must be exactly 3 uppercase letters");
+        }
+    }
+
+    return await airportRepo.update(id, data);
+}
+
+export async function deleteAirport(id: string) {
+    return await airportRepo.delete_(id);
+}
+
+export async function findAirportById(id: string) {
+    return await airportRepo.getById(id);
+}
+
+export async function findAirportByIataCode(iataCode: string) {
+    return await airportRepo.getByIataCode(iataCode);
+}
+
+export { count as getAirportCount, getAll as getAllAirports } from "../Repository/airport.ts";

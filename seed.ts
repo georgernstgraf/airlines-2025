@@ -6,11 +6,54 @@ import { faker } from "@faker-js/faker";
 import { disconnect } from "./Repository/db.ts";
 
 const ensurePassengers = 20000;
-const ensureAirports = 100;
 const ensurePlanes = 250;
-const ensureFlights = 5000;
+const ensureFlights = 2000;
+
+// Real-world airport list to avoid fake locations
+const realAirports = [
+    { name: "Vienna International Airport", iataCode: "VIE", city: "Vienna" },
+    { name: "Graz Airport", iataCode: "GRZ", city: "Graz" },
+    { name: "Salzburg Airport", iataCode: "SZG", city: "Salzburg" },
+    { name: "Innsbruck Airport", iataCode: "INN", city: "Innsbruck" },
+    { name: "Linz Airport", iataCode: "LNZ", city: "Linz" },
+    { name: "Munich Airport", iataCode: "MUC", city: "Munich" },
+    { name: "Frankfurt Airport", iataCode: "FRA", city: "Frankfurt" },
+    { name: "Berlin Brandenburg Airport", iataCode: "BER", city: "Berlin" },
+    { name: "Zurich Airport", iataCode: "ZRH", city: "Zurich" },
+    { name: "Geneva Airport", iataCode: "GVA", city: "Geneva" },
+    { name: "Paris Charles de Gaulle", iataCode: "CDG", city: "Paris" },
+    { name: "London Heathrow", iataCode: "LHR", city: "London" },
+    { name: "Amsterdam Schiphol", iataCode: "AMS", city: "Amsterdam" },
+    { name: "Madrid Barajas", iataCode: "MAD", city: "Madrid" },
+    { name: "Barcelona El Prat", iataCode: "BCN", city: "Barcelona" },
+    { name: "Rome Fiumicino", iataCode: "FCO", city: "Rome" },
+    { name: "Milan Malpensa", iataCode: "MXP", city: "Milan" },
+    { name: "Copenhagen Airport", iataCode: "CPH", city: "Copenhagen" },
+    { name: "Stockholm Arlanda", iataCode: "ARN", city: "Stockholm" },
+    { name: "Oslo Gardermoen", iataCode: "OSL", city: "Oslo" },
+    { name: "Helsinki Vantaa", iataCode: "HEL", city: "Helsinki" },
+    { name: "Brussels Airport", iataCode: "BRU", city: "Brussels" },
+    { name: "Prague Vaclav Havel", iataCode: "PRG", city: "Prague" },
+    { name: "Budapest Ferenc Liszt", iataCode: "BUD", city: "Budapest" },
+    { name: "Warsaw Chopin", iataCode: "WAW", city: "Warsaw" },
+    { name: "Lisbon Airport", iataCode: "LIS", city: "Lisbon" },
+    { name: "Dublin Airport", iataCode: "DUB", city: "Dublin" },
+    { name: "Athens International", iataCode: "ATH", city: "Athens" },
+    { name: "Istanbul Airport", iataCode: "IST", city: "Istanbul" },
+    { name: "Doha Hamad", iataCode: "DOH", city: "Doha" },
+    { name: "Dubai International", iataCode: "DXB", city: "Dubai" },
+];
+const ensureAirports = realAirports.length;
 
 console.log("🌱 Starting seed...");
+
+// Clean existing data so we don't keep fake airports/flights
+const { prisma } = await import("./Repository/db.ts");
+await prisma.$executeRaw`DELETE FROM "_FlightToPassenger"`;
+await prisma.flight.deleteMany();
+await prisma.passenger.deleteMany();
+await prisma.airport.deleteMany();
+await prisma.plane.deleteMany();
 
 // ensure passengers (no deps)
 console.log(`Ensuring ${ensurePassengers} passengers...`);
@@ -40,9 +83,9 @@ if (planes_to_create > 0) {
     console.log(`  Created ${planes_to_create} planes`);
 }
 
-// ensure airports (no deps)
+// ensure airports (no deps, real list)
 console.log(`Ensuring ${ensureAirports} airports...`);
-let  airports_to_create = ensureAirports - await airportService.count();
+let airports_to_create = ensureAirports - await airportService.getAirportCount();
 while (airports_to_create > 0) {
     const fake_airport = faker.airline.airport();
     const airportData = {
@@ -64,7 +107,7 @@ console.log(`Ensuring ${ensureFlights} flights...`);
 const flights_to_create = ensureFlights - await flightService.count();
 
 // Fetch available airports and planes (once!)
-const airports = await airportService.getAll();
+const airports = await airportService.getAllAirports();
 const planes = await planeService.getAll();
 
 if (airports.length < 2) {
@@ -89,7 +132,7 @@ if (flights_to_create > 0) {
         const plane = planes[faker.number.int({ min: 0, max: planes.length - 1 })];
 
         return {
-            flightNumber: faker.airline.flightNumber(),
+            flightNumber: `${faker.airline.airline().iataCode}${faker.airline.flightNumber({ addLeadingZeros: true })}`, // 'AA0798'
             departureTime: departure,
             arrivalTime: arrival,
             originId: origin.id,
@@ -99,6 +142,9 @@ if (flights_to_create > 0) {
     });
     await flightService.createManyFlights(flightData);
     console.log(`  Created ${flights_to_create} flights`);
+} else {
+    console.log(`  No new flights needed, reassigning flight numbers...`);
+    await flightService.regenerateAllIds();
 }
 
 // assign passengers to flights
@@ -108,7 +154,7 @@ const allPassengers = await passengerService.findMany();
 
 console.log(`Found ${allFlights.length} flights and ${allPassengers.length} passengers`);
 
-if (allFlights.length > 0 && allPassengers.length > 0) {
+if (allFlights.length > 0 && allPassengers.length > 0) { // so only do this if we have both
     let assignedCount = 0;
     for (const f of allFlights) {
         // Random number of passengers per flight (0 to 50)
