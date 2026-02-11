@@ -31,9 +31,8 @@ export async function createManyPlanes(data: Array<{
         }
     }
 
-    // Delegiere an Prisma
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.plane.createMany({ data });
+    // Delegiere an Repository
+    return await Promise.all(data.map(plane => planeRepo.create(plane)));
 }
 
 export async function updatePlane(
@@ -54,27 +53,16 @@ export async function updatePlane(
 }
 
 export async function deletePlane(id: string) {
-    return await planeRepo.delete(id);
+    return await planeRepo.delete_(id);
 }
 
 export async function findPlaneById(id: string) {
-    return await planeRepo.findById(id);
+    return await planeRepo.getById(id);
 }
 
 export async function getAll() {
     return await planeRepo.getAll();
 }
 export async function findPlanesByModel(model: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.plane.findMany({
-        where: { model: { contains: model } },
-        include: { _count: { select: { flights: true } } }
-    return await planeRepo.findByModel(modelonst { prisma } = await import("../Repository/db.ts");
-    const plane = await prisma.plane.findUnique({
-        where: { id },
-        include: {
-            flights: {
-                select: {
-                    id: true,
-                    _count: { select: { passengers: true } }
-    return await planeRepo.getStatistics(id)
+    return await planeRepo.getByModel(model);
+}

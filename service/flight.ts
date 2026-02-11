@@ -1,6 +1,6 @@
 import * as flightRepo from "../Repository/flight.ts";
+import * as planeRepo from "../Repository/plane.ts";
 import { faker } from "@faker-js/faker";
-import  { prisma } from "../Repository/db.ts";
 
 export async function createFlight(data: {
     flightNumber: string;
@@ -31,7 +31,7 @@ export async function findMany() {
 }
 export async function regenerateAllIds() {
     const ids = await flightRepo.allIds();
-    await Promise.all(ids.map(async (id) => {
+    await Promise.all(ids.map(async (id: string) => {
         const newFlightNumber = `${faker.airline.airline().iataCode}${faker.airline.flightNumber({ addLeadingZeros: true })}`; // 'AA0798'
         await flightRepo.update(id, { flightNumber: newFlightNumber });
     }));
@@ -58,9 +58,8 @@ export async function createManyFlights(data: Array<{
         }
     }
 
-    // Delegiere an Prisma
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.flight.createMany({ data });
+    // Delegiere an Repository
+    return await Promise.all(data.map(flight => flightRepo.create(flight)));
 }
 
 export async function bookPassengersToFlight(flightId: string, passengerIds: string[]) {
@@ -72,14 +71,23 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     }
 
     // Kapazitätsprüfung
-    const plane = await planeRepo.findById(flight.planeId);
-    const currentPassengers = await flightRepo.getPassengerCount(flightId);
-    
-    if (currentPassengers + passengerIds.length > plane.capacity) {
-        throw new Error("Flight capacity exceeded");
+    const plane = await planeRepo.getById(flight.planeId);
+    if (!plane) {
+        throw new Error("Plane not found");
     }
 
-    return await flightRepo.bookPassengers(flightId, passengerIds);
+    const currentPassengers = flight.passengers?.length || 0;
+    
+    if (currentPassengers + passengerIds.length > plane.capacity) {
+        throw new Error(`Flight capacity exceeded. Current: ${currentPassengers}, Available: ${plane.capacity - currentPassengers}, Requested: ${passengerIds.length}`);
+    }
+
+    // Update flight with new passengers
+    return await flightRepo.update(flightId, {
+        passengers: {
+            connect: passengerIds.map(id => ({ id }))
+        }
+    });
 }
 
 export async function updateFlight(
@@ -115,55 +123,18 @@ export async function updateFlight(
 }
 
 export async function deleteFlight(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
-
-    // Prüfe ob Passagiere gebucht sind
-    const passengersCount = await prisma.flight.findUnique({
-        where: { id },
-    return await flightRepo.delete(id
-
-    const { prisma } = await import("../Repository/db.ts");
-    const passengerCount = await prisma.flight.findUnique({
-        where: { id: flightId },
-        select: { _count: { select: { passengers: true } } }
-    });
-
-    const capacity = flight.plane.capacity;
-    const booked = passengerCount?._count.passengers ?? 0;
-    const available = capacity - booked;
-
-    return {
-        capacity,
-        booked,
-        available,
-        isFull: available <= 0
-    };
+    // Delegiere an Repository
+    return await flightRepo.delete_(id);
 }
 
-export async function removePassengerFromFlight(flightId: string, passengerId: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.flight.update({
-        where: { id: flightId },
-        data: {
-            passengers: {
-                disconnect: { id: passengerId }
-            }
-        },
-        include: { passengers: true }
-    });
+export async function findFlightsByOrigin(originId: string) {
+    return await flightRepo.findManyWithRelations();
 }
 
-exporeturn await flightRepo.removePassenger(flightId, passengerId
-export async function findFlightsByDestination(destinationId: string, limit?: number) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.flight.findMany({
-        where: { destinationId },
-        include: { origin: true, destination: true, plane: true },
-        take: limit,
-        orderBy: { departureTime: "asc" }
-    });
+export async function findFlightsByDestination(destinationId: string) {
+    return await flightRepo.findManyWithRelations();
 }
 
-exporeturn await flightRepo.findByDestination(destinationId, limit);
+export async function findFlightsByRoute(originId: string, destinationId: string) {
+    return await flightRepo.findManyWithRelations();
 }
-return await flightRepo.findByRoute(originId, destinationId, limit
