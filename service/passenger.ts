@@ -37,7 +37,7 @@ export async function createManyPassengers(data: Array<{
     }
 
     // Delegiere an Repository
-    return await Promise.all(data.map(passenger => passengerRepo.create(passenger)));
+    return Promise.all(data.map(passenger => passengerRepo.create(passenger)));
 }
 
 export async function updatePassenger(
@@ -75,10 +75,6 @@ export async function findPassengerByEmail(email: string) {
     return await passengerRepo.findByEmail(email);
 }
 
-export async function searchPassengersByName(firstName: string, lastName?: string) {
-    return await passengerRepo.searchByName(firstName, lastName);
-}
-
-export async function getPassengerFlights(passengerId: string) {
-    return await passengerRepo.getFlights(passengerId);
+export async function findPassengerWithFlights(id: string) {
+    return await passengerRepo.findById(id);
 }

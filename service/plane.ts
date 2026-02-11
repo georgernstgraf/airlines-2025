@@ -70,9 +70,5 @@ export async function getAllWithFlights() {
 }
 
 export async function findPlanesByModel(model: string) {
-    return await planeRepo.findByModel(model);
-}
-
-export async function getPlaneStatistics(id: string) {
-    return await planeRepo.getStatistics(id);
+    return await planeRepo.getByModel(model);
 }

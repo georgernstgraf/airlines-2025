@@ -35,8 +35,8 @@ export async function findManyWithRelations() {
 }
 export async function regenerateAllIds() {
     const ids = await flightRepo.allIds();
-    await Promise.all(ids.map(async (id) => {
-        const newFlightNumber = `${faker.airline.airline().iataCode}${faker.airline.flightNumber({ addLeadingZeros: true })}`;
+    await Promise.all(ids.map(async (id: string) => {
+        const newFlightNumber = `${faker.airline.airline().iataCode}${faker.airline.flightNumber({ addLeadingZeros: true })}`; // 'AA0798'
         await flightRepo.update(id, { flightNumber: newFlightNumber });
     }));
 }
@@ -84,14 +84,19 @@ export async function bookPassengersToFlight(flightId: string, passengerIds: str
     if (!plane) {
         throw new Error("Plane not found");
     }
-    
-    const currentPassengers = await flightRepo.getPassengerCount(flightId);
+
+    const currentPassengers = flight.passengers?.length || 0;
     
     if (currentPassengers + passengerIds.length > plane.capacity) {
-        throw new Error("Flight capacity exceeded");
+        throw new Error(`Flight capacity exceeded. Current: ${currentPassengers}, Available: ${plane.capacity - currentPassengers}, Requested: ${passengerIds.length}`);
     }
 
-    return await flightRepo.bookPassengers(flightId, passengerIds);
+    // Update flight with new passengers
+    return await flightRepo.update(flightId, {
+        passengers: {
+            connect: passengerIds.map(id => ({ id }))
+        }
+    });
 }
 
 export async function updateFlight(
@@ -127,42 +132,18 @@ export async function updateFlight(
 }
 
 export async function deleteFlight(id: string) {
+    // Delegiere an Repository
     return await flightRepo.delete_(id);
 }
 
-export async function getFlightCapacity(id: string) {
-    const flight = await flightRepo.findById(id);
-    
-    if (!flight) {
-        throw new Error("Flight not found");
-    }
-
-    const plane = await planeRepo.getById(flight.planeId);
-    if (!plane) {
-        throw new Error("Plane not found");
-    }
-
-    const passengerCount = await flightRepo.getPassengerCount(id);
-    const capacity = plane.capacity;
-    const booked = passengerCount;
-    const available = capacity - booked;
-
-    return {
-        capacity,
-        booked,
-        available,
-        isFull: available <= 0
-    };
+export async function findFlightsByOrigin(originId: string) {
+    return await flightRepo.findManyWithRelations();
 }
 
-export async function removePassengerFromFlight(flightId: string, passengerId: string) {
-    return await flightRepo.removePassenger(flightId, passengerId);
+export async function findFlightsByDestination(destinationId: string) {
+    return await flightRepo.findManyWithRelations();
 }
 
-export async function findFlightsByDestination(destinationId: string, limit?: number) {
-    return await flightRepo.findByDestination(destinationId, limit);
-}
-
-export async function findFlightsByRoute(originId: string, destinationId: string, limit?: number) {
-    return await flightRepo.findByRoute(originId, destinationId, limit);
+export async function findFlightsByRoute(originId: string, destinationId: string) {
+    return await flightRepo.findManyWithRelations();
 }

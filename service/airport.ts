@@ -30,10 +30,8 @@ export async function createManyAirports(data: Array<{
         }
     }
 
-    // Delegiere an Prisma (SQLite unterstützt kein skipDuplicates)
-    // Bei Duplikaten wird der gesamte Batch fehlschlagen
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.airport.createMany({ data });
+    // Delegiere an Repository
+    return await Promise.all(data.map(airport => airportRepo.create(airport)));
 }
 
 export async function updateAirport(
@@ -59,21 +57,11 @@ export async function deleteAirport(id: string) {
 }
 
 export async function findAirportById(id: string) {
-    return await airportRepo.findById(id);
+    return await airportRepo.getById(id);
 }
 
 export async function findAirportByIataCode(iataCode: string) {
     return await airportRepo.getByIataCode(iataCode);
 }
 
-export async function searchAirportsByCity(city: string) {
-    return await airportRepo.searchByCity(city);
-}
-
-export async function getAirportCount() {
-    return await airportRepo.count();
-}
-
-export async function getAllAirports() {
-    return await airportRepo.getAll();
-}
+export { count, getAll } from "../Repository/airport.ts";
