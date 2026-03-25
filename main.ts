@@ -8,9 +8,10 @@ import * as flightService from "./service/flight.ts";
 
 const app = new Hono();
 app.use("/*", cors());
-app.use("/*", serveStatic({ root: "./static" }));
 
 app.get("/", (c) => c.json({ message: "Flight API", version: "1.0" }));
+
+app.use("/*", serveStatic({ root: "./static" }));
 
 // Passengers
 app.get("/passengers", async (c) => c.json(await passengerService.findMany()));
