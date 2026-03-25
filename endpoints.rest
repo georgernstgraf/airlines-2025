@@ -1,3 +1,10 @@
+### Variables (ersetze diese mit tatsächlichen IDs aus deinen GET-Requests)
+@flightId = 1
+@passengerId = 1
+@planeId = 1
+@airportId = 1
+@airportId2 = 2
+
 ### Health Check
 GET http://localhost:3000
 
@@ -10,12 +17,31 @@ GET http://localhost:3000/flights
 GET http://localhost:3000/flights?include=true
 
 ### Get ONE specific flight by ID (mit allen Relations)
-GET http://localhost:3000/flights/REPLACE_WITH_FLIGHT_ID
+GET http://localhost:3000/flights/{{flightId}}
+
+### Update flight by ID
+PUT http://localhost:3000/flights/{{flightId}}
+Content-Type: application/json
+
+{
+  "flightNumber": "OS456",
+  "departureTime": "2025-12-02T14:00:00Z",
+  "arrivalTime": "2025-12-02T16:00:00Z",
+  "originId": "{{airportId}}",
+  "destinationId": "{{airportId2}}",
+  "planeId": "{{planeId}}"
+}
+
+### Delete flight by ID
+DELETE http://localhost:3000/flights/{{flightId}}
 
 ### ============ PASSENGERS ============
 
 ### Get all passengers
 GET http://localhost:3000/passengers
+
+### Get passenger by ID
+GET http://localhost:3000/passengers/{{passengerId}}
 
 ### Create new passenger
 POST http://localhost:3000/passengers
@@ -27,10 +53,26 @@ Content-Type: application/json
   "email": "max.mustermann@example.com"
 }
 
+### Update passenger by ID
+PUT http://localhost:3000/passengers/{{passengerId}}
+Content-Type: application/json
+
+{
+  "firstName": "Maximilian",
+  "lastName": "Mustermann",
+  "email": "maximilian.mustermann@example.com"
+}
+
+### Delete passenger by ID
+DELETE http://localhost:3000/passengers/{{passengerId}}
+
 ### ============ PLANES ============
 
 ### Get all planes
 GET http://localhost:3000/planes
+
+### Get plane by ID
+GET http://localhost:3000/planes/{{planeId}}
 
 ### Create new plane
 POST http://localhost:3000/planes
@@ -41,10 +83,25 @@ Content-Type: application/json
   "capacity": 180
 }
 
+### Update plane by ID
+PUT http://localhost:3000/planes/{{planeId}}
+Content-Type: application/json
+
+{
+  "model": "Boeing 737",
+  "capacity": 200
+}
+
+### Delete plane by ID
+DELETE http://localhost:3000/planes/{{planeId}}
+
 ### ============ AIRPORTS ============
 
 ### Get all airports
 GET http://localhost:3000/airports
+
+### Get airport by ID
+GET http://localhost:3000/airports/{{airportId}}
 
 ### Create new airport
 POST http://localhost:3000/airports
@@ -56,6 +113,19 @@ Content-Type: application/json
   "city": "Vienna"
 }
 
+### Update airport by ID
+PUT http://localhost:3000/airports/{{airportId}}
+Content-Type: application/json
+
+{
+  "name": "Frankfurt Airport",
+  "iataCode": "FRA",
+  "city": "Frankfurt"
+}
+
+### Delete airport by ID
+DELETE http://localhost:3000/airports/{{airportId}}
+
 ### ============ CREATE FLIGHT ============
 
 ### Create new flight
@@ -66,20 +136,19 @@ Content-Type: application/json
   "flightNumber": "OS123",
   "departureTime": "2025-12-01T10:00:00Z",
   "arrivalTime": "2025-12-01T12:00:00Z",
-  "originId": "REPLACE_WITH_AIRPORT_ID",
-  "destinationId": "REPLACE_WITH_DIFFERENT_AIRPORT_ID",
-  "planeId": "REPLACE_WITH_PLANE_ID"
+  "originId": "{{airportId}}",
+  "destinationId": "{{airportId2}}",
+  "planeId": "{{planeId}}"
 }
 
 ### ============ BOOK PASSENGERS ============
 
 ### Book passengers to flight
-POST http://localhost:3000/flights/REPLACE_WITH_FLIGHT_ID/passengers
+POST http://localhost:3000/flights/{{flightId}}/passengers
 Content-Type: application/json
 
 {
   "passengerIds": [
-    "REPLACE_WITH_PASSENGER_ID_1",
-    "REPLACE_WITH_PASSENGER_ID_2"
+    "{{passengerId}}"
   ]
 }
