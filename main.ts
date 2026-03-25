@@ -8,9 +8,10 @@ import * as flightService from "./service/flight.ts";
 
 const app = new Hono();
 app.use("/*", cors());
-app.use("/*", serveStatic({ root: "./static" }));
 
 app.get("/", (c) => c.json({ message: "Flight API", version: "1.0" }));
+
+app.use("/*", serveStatic({ root: "./static" }));
 
 // Passengers
 app.get("/passengers", async (c) => c.json(await passengerService.findMany()));
@@ -74,5 +75,32 @@ app.post("/flights/:id/passengers", async (c) => {
     }
 });
 
-Deno.serve({ port: 3000 }, app.fetch);
-console.log("🚀 http://localhost:3000");
+function getPreferredPort() {
+    const rawPort = Deno.env.get("PORT");
+    const parsed = Number(rawPort);
+    if (Number.isInteger(parsed) && parsed > 0 && parsed < 65536) {
+        return parsed;
+    }
+    return 3000;
+}
+
+const preferredPort = getPreferredPort();
+let activePort = preferredPort;
+
+for (let offset = 0; offset <= 10; offset++) {
+    const candidatePort = preferredPort + offset;
+    try {
+        Deno.serve({ port: candidatePort }, app.fetch);
+        activePort = candidatePort;
+        break;
+    } catch (e) {
+        if (!(e instanceof Deno.errors.AddrInUse) || offset === 10) {
+            throw e;
+        }
+    }
+}
+
+if (activePort !== preferredPort) {
+    console.warn(`Port ${preferredPort} belegt, starte stattdessen auf Port ${activePort}.`);
+}
+console.log(`🚀 http://localhost:${activePort}`);

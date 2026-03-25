@@ -12,7 +12,8 @@
         "lint": "deno lint",
         "studio": "deno -A --env-file prisma studio",
         "dev": "deno run -A --env-file --watch main.ts",
-        "server": "deno -A --env-file main.ts"
+        "server": "deno -A --env-file main.ts",
+        "test": "deno run -A --env-file scripts/test_endpoints.ts"
     },
     "imports": {
         "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
