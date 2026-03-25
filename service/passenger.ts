@@ -23,11 +23,13 @@ export async function findManyWithFlights() {
     return await passengerRepo.findManyWithFlights();
 }
 
-export async function createManyPassengers(data: Array<{
-    firstName: string;
-    lastName: string;
-    email: string;
-}>) {
+export async function createManyPassengers(
+    data: Array<{
+        firstName: string;
+        lastName: string;
+        email: string;
+    }>,
+) {
     // Validiere alle Emails
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     for (const passenger of data) {
@@ -37,7 +39,7 @@ export async function createManyPassengers(data: Array<{
     }
 
     // Delegiere an Repository
-    return await Promise.all(data.map(passenger => passengerRepo.create(passenger)));
+    return await Promise.all(data.map((passenger) => passengerRepo.create(passenger)));
 }
 
 export async function updatePassenger(
@@ -46,7 +48,7 @@ export async function updatePassenger(
         firstName: string;
         lastName: string;
         email: string;
-    }>
+    }>,
 ) {
     // Validiere Email, falls übergeben
     if (data.email) {
@@ -81,4 +83,7 @@ export async function searchPassengersByName(firstName: string, lastName?: strin
 
 export async function getPassengerFlights(passengerId: string) {
     return await passengerRepo.getFlights(passengerId);
+}
+export async function findPassengerWithFlights(id: string) {
+    return await passengerRepo.findById(id);
 }

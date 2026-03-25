@@ -24,7 +24,7 @@ export async function findManyWithRelations() {
             plane: true,
             origin: true,
             destination: true,
-        }
+        },
     });
 }
 
@@ -36,7 +36,7 @@ export async function findById(id: string) {
             plane: true,
             origin: true,
             destination: true,
-        }
+        },
     });
 }
 
@@ -48,7 +48,7 @@ export async function findByFlightNumber(flightNumber: string) {
             plane: true,
             origin: true,
             destination: true,
-        }
+        },
     });
 }
 
@@ -57,14 +57,14 @@ export async function findByFlightNumber(flightNumber: string) {
 export async function update(id: string, data: Prisma.FlightUpdateInput) {
     return await prisma.flight.update({
         where: { id },
-        data
+        data,
     });
 }
 
 // DELETE - Flug löschen
 export async function delete_(id: string) {
     return await prisma.flight.delete({
-        where: { id }
+        where: { id },
     });
 }
 
@@ -72,15 +72,15 @@ export async function delete_(id: string) {
 // Gibt alle Flug-IDs zurück
 export async function allIds() {
     const flights = await prisma.flight.findMany({
-        select: { id: true }
+        select: { id: true },
     });
-    return flights.map(f => f.id);
+    return flights.map((f) => f.id);
 }
 
 export async function getPassengerCount(id: string) {
     const flight = await prisma.flight.findUnique({
         where: { id },
-        select: { passengers: { select: { id: true } } }
+        select: { passengers: { select: { id: true } } },
     });
     return flight?.passengers.length ?? 0;
 }
@@ -90,10 +90,10 @@ export async function bookPassengers(flightId: string, passengerIds: string[]) {
         where: { id: flightId },
         data: {
             passengers: {
-                connect: passengerIds.map(id => ({ id }))
-            }
+                connect: passengerIds.map((id) => ({ id })),
+            },
         },
-        include: { passengers: true }
+        include: { passengers: true },
     });
 }
 
@@ -102,19 +102,29 @@ export async function removePassenger(flightId: string, passengerId: string) {
         where: { id: flightId },
         data: {
             passengers: {
-                disconnect: { id: passengerId }
-            }
+                disconnect: { id: passengerId },
+            },
         },
-        include: { passengers: true }
+        include: { passengers: true },
     });
 }
 
-export async function findByDestination(destinationId: string, limit?: number) {
+//flightRepo.findByOrigin(originId);
+
+export async function findByOrigin(originId: string, limit: number = 7) {
+    return await prisma.flight.findMany({
+        where: { originId },
+        include: { origin: true, destination: true, plane: true, passengers: true },
+        take: limit,
+        orderBy: { departureTime: "asc" },
+    });
+}
+export async function findByDestination(destinationId: string, limit: number = 7) {
     return await prisma.flight.findMany({
         where: { destinationId },
         include: { origin: true, destination: true, plane: true, passengers: true },
         take: limit,
-        orderBy: { departureTime: "asc" }
+        orderBy: { departureTime: "asc" },
     });
 }
 
@@ -122,10 +132,10 @@ export async function findByRoute(originId: string, destinationId: string, limit
     return await prisma.flight.findMany({
         where: {
             originId,
-            destinationId
+            destinationId,
         },
         include: { origin: true, destination: true, plane: true, passengers: true },
         take: limit,
-        orderBy: { departureTime: "asc" }
+        orderBy: { departureTime: "asc" },
     });
 }

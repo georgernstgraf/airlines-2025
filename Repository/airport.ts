@@ -23,7 +23,7 @@ export async function getById(id: string) {
         include: {
             departingFlights: true,
             arrivingFlights: true,
-        }
+        },
     });
 }
 
@@ -33,7 +33,7 @@ export async function getByIataCode(iataCode: string) {
         include: {
             departingFlights: true,
             arrivingFlights: true,
-        }
+        },
     });
 }
 
@@ -41,14 +41,14 @@ export async function getByIataCode(iataCode: string) {
 export async function update(id: string, data: Prisma.AirportUpdateInput) {
     return await prisma.airport.update({
         where: { id },
-        data
+        data,
     });
 }
 
 // DELETE - Flughafen löschen
 export async function delete_(id: string) {
     return await prisma.airport.delete({
-        where: { id }
+        where: { id },
     });
 }
 
@@ -58,9 +58,9 @@ export async function searchByCity(city: string) {
     return await prisma.airport.findMany({
         where: {
             city: {
-                contains: city
-            }
-        }
+                contains: city,
+            },
+        },
     });
 }
 
@@ -70,6 +70,6 @@ export async function findById(id: string) {
         include: {
             departingFlights: true,
             arrivingFlights: true,
-        }
+        },
     });
 }

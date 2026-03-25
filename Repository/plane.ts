@@ -21,7 +21,7 @@ export async function getAllWithFlights() {
     return await prisma.plane.findMany({
         include: {
             flights: true,
-        }
+        },
     });
 }
 
@@ -30,7 +30,7 @@ export async function getById(id: string) {
         where: { id },
         include: {
             flights: true,
-        }
+        },
     });
 }
 
@@ -39,7 +39,7 @@ export async function getByModel(model: string) {
         where: { model },
         include: {
             flights: true,
-        }
+        },
     });
 }
 
@@ -47,14 +47,14 @@ export async function getByModel(model: string) {
 export async function update(id: string, data: Prisma.PlaneUpdateInput) {
     return await prisma.plane.update({
         where: { id },
-        data
+        data,
     });
 }
 
 // DELETE - Flugzeug löschen
 export async function delete_(id: string) {
     return await prisma.plane.delete({
-        where: { id }
+        where: { id },
     });
 }
 
@@ -64,12 +64,12 @@ export async function findByModel(model: string) {
     return await prisma.plane.findMany({
         where: {
             model: {
-                contains: model
-            }
+                contains: model,
+            },
         },
         include: {
-            _count: { select: { flights: true } }
-        }
+            _count: { select: { flights: true } },
+        },
     });
 }
 
@@ -80,10 +80,10 @@ export async function getStatistics(id: string) {
             flights: {
                 select: {
                     id: true,
-                    passengers: { select: { id: true } }
-                }
-            }
-        }
+                    passengers: { select: { id: true } },
+                },
+            },
+        },
     });
 
     if (!plane) {
@@ -100,6 +100,6 @@ export async function getStatistics(id: string) {
         totalFlights: plane.flights.length,
         totalPassengers,
         averagePassengersPerFlight,
-        utilization: ((totalPassengers / (plane.capacity * plane.flights.length)) * 100).toFixed(2) + "%"
+        utilization: ((totalPassengers / (plane.capacity * plane.flights.length)) * 100).toFixed(2) + "%",
     };
 }
