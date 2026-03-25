@@ -1,17 +1,15 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@hono/hono@^4.6.16": "4.7.10",
-    "npm:@faker-js/faker@^10.1.0": "10.3.0",
-    "npm:@prisma/client@^6.18.0": "6.19.2_prisma@6.19.2",
-    "npm:@types/node@^24.2.0": "24.10.13",
-    "npm:@vitejs/plugin-vue@^6.0.3": "6.0.4_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_vue@3.5.28_@types+node@24.10.13",
+    "jsr:@std/assert@1": "1.0.15",
+    "jsr:@std/internal@^1.0.12": "1.0.12",
+    "npm:@faker-js/faker@^10.1.0": "10.1.0",
+    "npm:@prisma/client@^6.18.0": "6.18.0_prisma@6.16.2",
+    "npm:@types/node@^24.2.0": "24.10.4",
     "npm:he@^1.2.0": "1.2.0",
-    "npm:prisma@^6.18.0": "6.19.2",
-    "npm:vite-plugin-vue-devtools@^8.0.5": "8.0.6_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_vue@3.5.28_@types+node@24.10.13",
-    "npm:vite@^7.3.1": "7.3.1_@types+node@24.10.13_picomatch@4.0.3",
-    "npm:vue-router@^4.6.4": "4.6.4_vue@3.5.28",
-    "npm:vue@^3.5.27": "3.5.28"
+    "npm:hono@^4.11.1": "4.11.1",
+    "npm:prisma@^6.18.0": "6.18.0",
+    "npm:prisma@latest": "6.16.2"
   },
   "jsr": {
     "@hono/hono@4.7.10": {
@@ -768,6 +766,18 @@
         "run-applescript"
       ]
     },
+    "@types/node@24.10.4": {
+      "integrity": "sha512-vnDVpYPMzs4wunl27jHrfmwojOGKya0xyM3sH+UE5iv5uPS6vX7UIoh6m+vQc5LGBq52HBKPIn/zcSZVzeDEZg==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
+    "@types/node@24.10.4": {
+      "integrity": "sha512-vnDVpYPMzs4wunl27jHrfmwojOGKya0xyM3sH+UE5iv5uPS6vX7UIoh6m+vQc5LGBq52HBKPIn/zcSZVzeDEZg==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
     "c12@3.1.0": {
       "integrity": "sha512-uWoS8OU1MEIsOv8p/5a82c3H31LsWVR5qiyXVfBNOzfffjUWtPnhAb4BYI2uG2HfGmZmFjCtui5XNWaps+iFuw==",
       "dependencies": [
@@ -952,8 +962,8 @@
       "integrity": "sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==",
       "bin": true
     },
-    "hookable@5.5.3": {
-      "integrity": "sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ=="
+    "hono@4.11.1": {
+      "integrity": "sha512-KsFcH0xxHes0J4zaQgWbYwmz3UPOOskdqZmItstUG93+Wk1ePBLkLGwbP9zlmh1BFUiL8Qp+Xfu9P7feJWpGNg=="
     },
     "is-docker@3.0.0": {
       "integrity": "sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ==",
@@ -1102,203 +1112,11 @@
     "readdirp@4.1.2": {
       "integrity": "sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg=="
     },
-    "rfdc@1.4.1": {
-      "integrity": "sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA=="
-    },
-    "rollup@4.57.1": {
-      "integrity": "sha512-oQL6lgK3e2QZeQ7gcgIkS2YZPg5slw37hYufJ3edKlfQSGGm8ICoxswK15ntSzF/a8+h7ekRy7k7oWc3BQ7y8A==",
-      "dependencies": [
-        "@types/estree"
-      ],
-      "optionalDependencies": [
-        "@rollup/rollup-android-arm-eabi",
-        "@rollup/rollup-android-arm64",
-        "@rollup/rollup-darwin-arm64",
-        "@rollup/rollup-darwin-x64",
-        "@rollup/rollup-freebsd-arm64",
-        "@rollup/rollup-freebsd-x64",
-        "@rollup/rollup-linux-arm-gnueabihf",
-        "@rollup/rollup-linux-arm-musleabihf",
-        "@rollup/rollup-linux-arm64-gnu",
-        "@rollup/rollup-linux-arm64-musl",
-        "@rollup/rollup-linux-loong64-gnu",
-        "@rollup/rollup-linux-loong64-musl",
-        "@rollup/rollup-linux-ppc64-gnu",
-        "@rollup/rollup-linux-ppc64-musl",
-        "@rollup/rollup-linux-riscv64-gnu",
-        "@rollup/rollup-linux-riscv64-musl",
-        "@rollup/rollup-linux-s390x-gnu",
-        "@rollup/rollup-linux-x64-gnu",
-        "@rollup/rollup-linux-x64-musl",
-        "@rollup/rollup-openbsd-x64",
-        "@rollup/rollup-openharmony-arm64",
-        "@rollup/rollup-win32-arm64-msvc",
-        "@rollup/rollup-win32-ia32-msvc",
-        "@rollup/rollup-win32-x64-gnu",
-        "@rollup/rollup-win32-x64-msvc",
-        "fsevents"
-      ],
-      "bin": true
-    },
-    "run-applescript@7.1.0": {
-      "integrity": "sha512-DPe5pVFaAsinSaV6QjQ6gdiedWDcRCbUuiQfQa2wmWV7+xC9bGulGI8+TdRmoFkAPaBXk8CrAbnlY2ISniJ47Q=="
-    },
-    "semver@6.3.1": {
-      "integrity": "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==",
-      "bin": true
-    },
-    "sirv@3.0.2": {
-      "integrity": "sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==",
-      "dependencies": [
-        "@polka/url",
-        "mrmime",
-        "totalist"
-      ]
-    },
-    "source-map-js@1.2.1": {
-      "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA=="
-    },
-    "speakingurl@14.0.1": {
-      "integrity": "sha512-1POYv7uv2gXoyGFpBCmpDVSNV74IfsWlDW216UPjbWufNf+bSU6GdbDsxdcxtfwb4xlI3yxzOTKClUosxARYrQ=="
-    },
-    "superjson@2.2.6": {
-      "integrity": "sha512-H+ue8Zo4vJmV2nRjpx86P35lzwDT3nItnIsocgumgr0hHMQ+ZGq5vrERg9kJBo5AWGmxZDhzDo+WVIJqkB0cGA==",
-      "dependencies": [
-        "copy-anything"
-      ]
-    },
-    "tinyexec@1.0.2": {
-      "integrity": "sha512-W/KYk+NFhkmsYpuHq5JykngiOCnxeVL8v8dFnqxSD8qEEdRfXk1SDM6JzNqcERbcGYj9tMrDQBYV9cjgnunFIg=="
-    },
-    "tinyglobby@0.2.15_picomatch@4.0.3": {
-      "integrity": "sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==",
-      "dependencies": [
-        "fdir",
-        "picomatch"
-      ]
-    },
-    "totalist@3.0.1": {
-      "integrity": "sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ=="
+    "tinyexec@1.0.1": {
+      "integrity": "sha512-5uC6DDlmeqiOwCPmK9jMSdOuZTh8bU39Ys6yidB+UTt5hfZUPGAypSgFRiEp+jbi9qH40BLDvy85jIU88wKSqw=="
     },
     "undici-types@7.16.0": {
       "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="
-    },
-    "unplugin-utils@0.3.1": {
-      "integrity": "sha512-5lWVjgi6vuHhJ526bI4nlCOmkCIF3nnfXkCMDeMJrtdvxTs6ZFCM8oNufGTsDbKv/tJ/xj8RpvXjRuPBZJuJog==",
-      "dependencies": [
-        "pathe",
-        "picomatch"
-      ]
-    },
-    "update-browserslist-db@1.2.3_browserslist@4.28.1": {
-      "integrity": "sha512-Js0m9cx+qOgDxo0eMiFGEueWztz+d4+M3rGlmKPT+T4IS/jP4ylw3Nwpu6cpTTP8R1MAC1kF4VbdLt3ARf209w==",
-      "dependencies": [
-        "browserslist",
-        "escalade",
-        "picocolors"
-      ],
-      "bin": true
-    },
-    "vite-dev-rpc@1.1.0_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_@types+node@24.10.13": {
-      "integrity": "sha512-pKXZlgoXGoE8sEKiKJSng4hI1sQ4wi5YT24FCrwrLt6opmkjlqPPVmiPWWJn8M8byMxRGzp1CrFuqQs4M/Z39A==",
-      "dependencies": [
-        "birpc",
-        "vite",
-        "vite-hot-client"
-      ]
-    },
-    "vite-hot-client@2.1.0_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_@types+node@24.10.13": {
-      "integrity": "sha512-7SpgZmU7R+dDnSmvXE1mfDtnHLHQSisdySVR7lO8ceAXvM0otZeuQQ6C8LrS5d/aYyP/QZ0hI0L+dIPrm4YlFQ==",
-      "dependencies": [
-        "vite"
-      ]
-    },
-    "vite-plugin-inspect@11.3.3_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_@types+node@24.10.13": {
-      "integrity": "sha512-u2eV5La99oHoYPHE6UvbwgEqKKOQGz86wMg40CCosP6q8BkB6e5xPneZfYagK4ojPJSj5anHCrnvC20DpwVdRA==",
-      "dependencies": [
-        "ansis",
-        "debug",
-        "error-stack-parser-es",
-        "ohash",
-        "open",
-        "perfect-debounce@2.1.0",
-        "sirv",
-        "unplugin-utils",
-        "vite",
-        "vite-dev-rpc"
-      ]
-    },
-    "vite-plugin-vue-devtools@8.0.6_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_vue@3.5.28_@types+node@24.10.13": {
-      "integrity": "sha512-IiTCIJDb1ZliOT8fPbYXllyfgARzz1+R1r8RN9ScGIDzAB6o8bDME1a9JjrfdSJibL7i8DIPQH+pGv0U7haBeA==",
-      "dependencies": [
-        "@vue/devtools-core",
-        "@vue/devtools-kit",
-        "@vue/devtools-shared",
-        "sirv",
-        "vite",
-        "vite-plugin-inspect",
-        "vite-plugin-vue-inspector"
-      ]
-    },
-    "vite-plugin-vue-inspector@5.3.2_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_@babel+core@7.29.0_@types+node@24.10.13": {
-      "integrity": "sha512-YvEKooQcSiBTAs0DoYLfefNja9bLgkFM7NI2b07bE2SruuvX0MEa9cMaxjKVMkeCp5Nz9FRIdcN1rOdFVBeL6Q==",
-      "dependencies": [
-        "@babel/core",
-        "@babel/plugin-proposal-decorators",
-        "@babel/plugin-syntax-import-attributes",
-        "@babel/plugin-syntax-import-meta",
-        "@babel/plugin-transform-typescript",
-        "@vue/babel-plugin-jsx",
-        "@vue/compiler-dom",
-        "kolorist",
-        "magic-string",
-        "vite"
-      ]
-    },
-    "vite@7.3.1_@types+node@24.10.13_picomatch@4.0.3": {
-      "integrity": "sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA==",
-      "dependencies": [
-        "@types/node",
-        "esbuild",
-        "fdir",
-        "picomatch",
-        "postcss",
-        "rollup",
-        "tinyglobby"
-      ],
-      "optionalDependencies": [
-        "fsevents"
-      ],
-      "optionalPeers": [
-        "@types/node"
-      ],
-      "bin": true
-    },
-    "vue-router@4.6.4_vue@3.5.28": {
-      "integrity": "sha512-Hz9q5sa33Yhduglwz6g9skT8OBPii+4bFn88w6J+J4MfEo4KRRpmiNG/hHHkdbRFlLBOqxN8y8gf2Fb0MTUgVg==",
-      "dependencies": [
-        "@vue/devtools-api",
-        "vue"
-      ]
-    },
-    "vue@3.5.28": {
-      "integrity": "sha512-BRdrNfeoccSoIZeIhyPBfvWSLFP4q8J3u8Ju8Ug5vu3LdD+yTM13Sg4sKtljxozbnuMu1NB1X5HBHRYUzFocKg==",
-      "dependencies": [
-        "@vue/compiler-dom",
-        "@vue/compiler-sfc",
-        "@vue/runtime-dom",
-        "@vue/server-renderer",
-        "@vue/shared"
-      ]
-    },
-    "wsl-utils@0.1.0": {
-      "integrity": "sha512-h3Fbisa2nKGPxCpm89Hk33lBLsnaGBvctQopaBSOW/uIs6FTe1ATyAnKFJrzVs9vpGdsTe73WF3V4lIsk4Gacw==",
-      "dependencies": [
-        "is-wsl"
-      ]
-    },
-    "yallist@3.1.1": {
-      "integrity": "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g=="
     }
   },
   "workspace": {
@@ -1308,13 +1126,9 @@
       "npm:@faker-js/faker@^10.1.0",
       "npm:@prisma/client@^6.18.0",
       "npm:@types/node@^24.2.0",
-      "npm:@vitejs/plugin-vue@^6.0.3",
       "npm:he@^1.2.0",
-      "npm:prisma@^6.18.0",
-      "npm:vite-plugin-vue-devtools@^8.0.5",
-      "npm:vite@^7.3.1",
-      "npm:vue-router@^4.6.4",
-      "npm:vue@^3.5.27"
+      "npm:hono@^4.11.1",
+      "npm:prisma@^6.18.0"
     ]
   }
 }
