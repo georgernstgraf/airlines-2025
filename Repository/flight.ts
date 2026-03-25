@@ -1,16 +1,18 @@
 import { Prisma } from "../prisma/client/client.ts";
 import { prisma } from "./db.ts"
 
-// CREATE
+// CREATE - Neuen Flug erstellen
 export async function create(data: Prisma.FlightCreateArgs["data"]) {
     return await prisma.flight.create({ data });
 }
 
-// READ
+// READ - Flüge abrufen
+// Zählt alle Flüge
 export async function count() {
     return await prisma.flight.count();
 }
 
+// Gibt alle Flüge zurück
 export async function findMany() {
     return await prisma.flight.findMany();
 }
@@ -51,7 +53,7 @@ export async function findByFlightNumber(flightNumber: string) {
 }
 
 
-// UPDATE
+// UPDATE - Flug aktualisieren
 export async function update(id: string, data: Prisma.FlightUpdateInput) {
     return await prisma.flight.update({
         where: { id },
@@ -59,14 +61,15 @@ export async function update(id: string, data: Prisma.FlightUpdateInput) {
     });
 }
 
-// DELETE
+// DELETE - Flug löschen
 export async function delete_(id: string) {
     return await prisma.flight.delete({
         where: { id }
     });
 }
 
-// HELPER FUNCTIONS
+// HELPER FUNCTIONS - Hilfsfunktionen
+// Gibt alle Flug-IDs zurück
 export async function allIds() {
     const flights = await prisma.flight.findMany({
         select: { id: true }

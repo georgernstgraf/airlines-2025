@@ -1,17 +1,19 @@
-// nur mit diesem Objekt in die Datenbank greifen
+// Nur mit diesem Objekt in die Datenbank greifen
 import { Prisma } from "../prisma/client/client.ts";
 import { prisma } from "./db.ts"
 
-// CREATE
+// CREATE - Neuen Passagier erstellen
 export async function create(data: Prisma.PassengerCreateArgs["data"]) {
     return await prisma.passenger.create({ data });
 }
 
-// READ
+// READ - Passagiere abrufen
+// Zählt alle Passagiere
 export async function count() {
     return await prisma.passenger.count();
 }
 
+// Gibt alle Passagiere zurück
 export async function findMany() {
     return await prisma.passenger.findMany();
 }
@@ -42,7 +44,7 @@ export async function findByEmail(email: string) {
     });
 }
 
-// UPDATE
+// UPDATE - Passagier aktualisieren
 export async function update(id: string, data: Prisma.PassengerUpdateInput) {
     return await prisma.passenger.update({
         where: { id },
@@ -50,14 +52,15 @@ export async function update(id: string, data: Prisma.PassengerUpdateInput) {
     });
 }
 
-// DELETE
+// DELETE - Passagier löschen
 export async function delete_(id: string) {
     return await prisma.passenger.delete({
         where: { id }
     });
 }
 
-// SEARCH
+// SEARCH - Passagiere suchen
+// Sucht Passagiere nach Vor- und Nachname
 export async function searchByName(firstName: string, lastName?: string) {
     const where: Prisma.PassengerWhereInput = {
         firstName: {

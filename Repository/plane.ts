@@ -1,16 +1,18 @@
 import { Prisma } from "../prisma/client/client.ts";
 import { prisma } from "./db.ts"
 
-// CREATE
+// CREATE - Neues Flugzeug erstellen
 export async function create(data: Prisma.PlaneCreateArgs["data"]) {
     return await prisma.plane.create({ data });
 }
 
-// READ
+// READ - Flugzeuge abrufen
+// Zählt alle Flugzeuge
 export async function count() {
     return await prisma.plane.count();
 }
 
+// Gibt alle Flugzeuge zurück
 export async function getAll() {
     return await prisma.plane.findMany();
 }
@@ -41,7 +43,7 @@ export async function getByModel(model: string) {
     });
 }
 
-// UPDATE
+// UPDATE - Flugzeug aktualisieren
 export async function update(id: string, data: Prisma.PlaneUpdateInput) {
     return await prisma.plane.update({
         where: { id },
@@ -49,14 +51,15 @@ export async function update(id: string, data: Prisma.PlaneUpdateInput) {
     });
 }
 
-// DELETE
+// DELETE - Flugzeug löschen
 export async function delete_(id: string) {
     return await prisma.plane.delete({
         where: { id }
     });
 }
 
-// SEARCH & STATISTICS
+// SEARCH & STATISTICS - Suche und Statistiken
+// Sucht Flugzeuge nach Modell und zählt Flüge
 export async function findByModel(model: string) {
     return await prisma.plane.findMany({
         where: {

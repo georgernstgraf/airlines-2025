@@ -1,16 +1,18 @@
 import { Prisma } from "../prisma/client/client.ts";
 import { prisma } from "./db.ts"
 
-// CREATE
+// CREATE - Neuen Flughafen erstellen
 export async function create(data: Prisma.AirportCreateArgs["data"]) {
     return await prisma.airport.create({ data });
 }
 
-// READ
+// READ - Flughäfen abrufen
+// Zählt alle Flughäfen
 export async function count() {
     return await prisma.airport.count();
 }
 
+// Gibt alle Flughäfen zurück
 export async function getAll() {
     return await prisma.airport.findMany();
 }
@@ -35,7 +37,7 @@ export async function getByIataCode(iataCode: string) {
     });
 }
 
-// UPDATE
+// UPDATE - Flughafen aktualisieren
 export async function update(id: string, data: Prisma.AirportUpdateInput) {
     return await prisma.airport.update({
         where: { id },
@@ -43,14 +45,15 @@ export async function update(id: string, data: Prisma.AirportUpdateInput) {
     });
 }
 
-// DELETE
+// DELETE - Flughafen löschen
 export async function delete_(id: string) {
     return await prisma.airport.delete({
         where: { id }
     });
 }
 
-// SEARCH
+// SEARCH - Flughäfen suchen
+// Sucht Flughäfen nach Stadt
 export async function searchByCity(city: string) {
     return await prisma.airport.findMany({
         where: {
