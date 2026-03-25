@@ -11,7 +11,8 @@
     "check": "deno check",
     "studio": "deno -A --env-file prisma studio",
     "dev": "deno run -A --env-file --watch main.ts",
-    "server": "deno -A --env-file main.ts"
+    "server": "deno -A --env-file main.ts",
+    "vite": "node node_modules/.bin/vite.cmd"
   },
   "imports": {
     "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
