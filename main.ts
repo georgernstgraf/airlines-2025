@@ -29,6 +29,25 @@ app.onError((err, c) => {
     }
 });
 
+// Serve static files from ./static under /static/* so API routes are not intercepted
+app.use('/static/*',
+    serveStatic({
+        root: './static',
+    })
+);
+
+// Global error handler to log server-side errors for debugging
+app.onError((err, c) => {
+    console.error('Unhandled error:', err);
+    try {
+        return c.json({ error: err?.message ?? 'Internal Server Error' }, 500);
+    } catch (e) {
+        // If even responding fails, log and return a plain Response
+        console.error('Error while sending error response', e);
+        return new Response('Internal Server Error', { status: 500 });
+    }
+});
+
 app.get("/", (c) => c.json({ message: 'Flight API', version: '1.0' }));
 
 // Passengers
