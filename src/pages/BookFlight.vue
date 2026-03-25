@@ -163,37 +163,41 @@ const bookFlight = async () => {
     return
   }
 
-  // Generiere Buchungsnummer
-  bookingNumber.value = 'BOOK-' + Math.random().toString(36).substr(2, 9).toUpperCase()
-
   try {
-    // Buche Passagiere für den Flug
-    const passengerResponse = await fetch(`/api/flights/${flightData.value.flight.id}/passengers`, {
+    // Create booking with passenger data
+    const bookingResponse = await fetch('/api/bookings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        passengerIds: passengers.value.map((_, i) => i.toString())
+        flightId: flightData.value.flight.id,
+        passengers: passengers.value
       })
     })
 
-    if (passengerResponse.ok) {
-      // Speichere Buchungsdaten
+    if (bookingResponse.ok) {
+      const bookingResult = await bookingResponse.json()
+      bookingNumber.value = bookingResult.bookingNumber
+
+      // Save booking data to sessionStorage
       const bookingData = {
-        bookingNumber: bookingNumber.value,
+        bookingNumber: bookingResult.bookingNumber,
         flight: flightData.value.flight,
         date: flightData.value.date,
-        passengers: passengers.value,
+        passengers: bookingResult.passengers,
         totalPrice: flightData.value.totalPrice,
-        bookingDate: new Date().toISOString()
+        bookingDate: bookingResult.bookingDate
       }
 
       sessionStorage.setItem('bookingConfirmation', JSON.stringify(bookingData))
       bookingConfirmed.value = true
 
-      // Lösche die Flugauswahl nach erfolgreicher Buchung
+      // Clear selection after successful booking
       setTimeout(() => {
         sessionStorage.removeItem('selectedFlight')
       }, 3000)
+    } else {
+      const error = await bookingResponse.json()
+      alert('Buchung fehlgeschlagen: ' + (error.error || 'Unbekannter Fehler'))
     }
   } catch (error) {
     console.error('Booking error:', error)
