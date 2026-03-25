@@ -1,6 +1,21 @@
 import { assert, assertEquals } from "https://deno.land/std@0.203.0/testing/asserts.ts";
 
-const BASE_URL = "http://127.0.0.1:3000";
+function getBaseUrl() {
+    const explicitBaseUrl = Deno.env.get("API_BASE_URL");
+    if (explicitBaseUrl) {
+        return explicitBaseUrl;
+    }
+
+    const portRaw = Deno.env.get("PORT") ?? "3000";
+    const port = Number(portRaw);
+    if (!Number.isInteger(port) || port <= 0 || port >= 65536) {
+        throw new Error(`Invalid PORT in environment: ${portRaw}`);
+    }
+
+    return `http://127.0.0.1:${port}`;
+}
+
+const BASE_URL = getBaseUrl();
 
 async function fetchJson(path: string, options: RequestInit = {}) {
     const response = await fetch(`${BASE_URL}${path}`, {
