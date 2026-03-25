@@ -9,10 +9,12 @@
     "migrate:reset": "deno -A prisma migrate reset",
     "seed": "deno run -A --env-file seed.ts",
     "check": "deno check",
+    "frontend:build": "deno task vite build",
+    "build": "deno task frontend:build && deno task check",
     "studio": "deno -A --env-file prisma studio",
     "dev": "deno run -A --env-file --watch main.ts",
     "server": "deno -A --env-file main.ts",
-    "vite": "node node_modules/.bin/vite.cmd"
+    "vite": "deno run -A npm:vite"
   },
   "imports": {
     "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
