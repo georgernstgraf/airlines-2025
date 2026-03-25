@@ -1,6 +1,30 @@
 # ⚡ Quick Start Guide
 
-## 🚀 So startest du die Anwendung
+## � Wichtige Git-Befehle (Alltag für VS Code Terminal)
+
+Hier sind die wichtigsten Befehle, die du brauchst, um am Projekt mitzuarbeiten:
+
+| Aktion | Befehl | Erklärung |
+| :--- | :--- | :--- |
+| **Status prüfen** | `git status` | Zeigt an, welche Dateien geändert wurden |
+| **Änderungen holen** | `git pull` | Holt die neuesten Änderungen von GitHub |
+| **Alles markieren (Stage)**| `git add .` | Fügt alle geänderten Dateien zum nächsten Commit hinzu |
+| **Commit erstellen** | `git commit -m "Deine Nachricht"` | Speichert die Änderungen lokal mit einer kurzen Beschreibung |
+| **Hochladen (Push)** | `git push` | Lädt deine lokalen Commits auf GitHub hoch |
+| **Neuen Branch erstellen**| `git checkout -b <feature-name>`| Erstellt einen neuen Branch (z.B. für dein Issue) und wechselt dorthin |
+| **Branch wechseln** | `git checkout <branch-name>` | Wechselt zu einem anderen, bereits existierenden Branch |
+| **Main in eigenen Branch holen** | `git pull origin main` | Holt die neuesten Änderungen aus dem Main in deinen aktuellen Branch |
+
+💡 **Unser Projektablauf (Workflow):**
+1. **Updaten:** Auf dem persönlichen Branch `git pull origin main` ausführen (holt die neuesten Main-Änderungen zu dir).
+2. **Arbeiten & Testen:** Code bearbeiten und lokal testen (inkl. App starten wie unten beschrieben).
+3. **Speichern:** `git add .` gefolgt von `git commit -m "Deine Beschreibung"`.
+4. **Hochladen:** `git push origin <dein-branch>`.
+5. **Abschluss:** Auf GitHub einen **Pull Request (PR)** erstellen, um deine fertigen Änderungen in den `main` zu mergen!
+
+---
+
+## �🚀 So startest du die Anwendung
 
 ### Terminal 1: Backend starten
 
