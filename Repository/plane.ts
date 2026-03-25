@@ -1,5 +1,4 @@
-import { Prisma } from "../prisma/client/client.ts";
-import { prisma } from "./db.ts"
+import { prisma, type Prisma, type Flight } from "./db.ts"
 
 // CREATE - Neues Flugzeug erstellen
 export async function create(data: Prisma.PlaneCreateArgs["data"]) {
@@ -90,7 +89,7 @@ export async function getStatistics(id: string) {
         return null;
     }
 
-    const totalPassengers = plane.flights.reduce((sum, flight) => sum + flight.passengers.length, 0);
+    const totalPassengers = plane.flights.reduce((sum: number, flight: Flight) => sum + flight.passengers.length, 0);
     const averagePassengersPerFlight = plane.flights.length > 0 ? totalPassengers / plane.flights.length : 0;
 
     return {

@@ -1,6 +1,4 @@
-// Nur mit diesem Objekt in die Datenbank greifen
-import { Prisma } from "../prisma/client/client.ts";
-import { prisma } from "./db.ts"
+import { prisma, type Prisma } from "./db.ts"
 
 // CREATE - Neuen Passagier erstellen
 export async function create(data: Prisma.PassengerCreateArgs["data"]) {

@@ -1,5 +1,4 @@
-import { Prisma } from "../prisma/client/client.ts";
-import { prisma } from "./db.ts"
+import { prisma, type Prisma, type Flight } from "./db.ts"
 
 // CREATE - Neuen Flug erstellen
 export async function create(data: Prisma.FlightCreateArgs["data"]) {
@@ -74,7 +73,7 @@ export async function allIds() {
     const flights = await prisma.flight.findMany({
         select: { id: true },
     });
-    return flights.map((f) => f.id);
+    return flights.map((f: Flight) => f.id);
 }
 
 export async function getPassengerCount(id: string) {

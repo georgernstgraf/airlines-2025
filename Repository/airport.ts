@@ -1,5 +1,4 @@
-import { Prisma } from "../prisma/client/client.ts";
-import { prisma } from "./db.ts"
+import { prisma, type Prisma } from "./db.ts"
 
 // CREATE - Neuen Flughafen erstellen
 export async function create(data: Prisma.AirportCreateArgs["data"]) {
