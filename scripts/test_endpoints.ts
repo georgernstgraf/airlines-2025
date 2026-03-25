@@ -109,11 +109,25 @@ async function main() {
         throw new Error(`Failed to create airport; last status=${aResStatus}, body=${JSON.stringify(aData)}`);
     }
 
-    // For flight creation we need at least 2 airports and a plane. Reuse existing data.
+    // For flight creation we need at least 2 airports and a plane.
     const allAirportsResp = await fetchJson("/airports");
     assertEquals(allAirportsResp.response.status, 200);
     const airports = allAirportsResp.data as Array<{ id: string }>;
-    assert(airports.length >= 2, "Need at least 2 airports");
+
+    while (airports.length < 2) {
+        const airportPayload = {
+            name: `Test Airport ${crypto.randomUUID().slice(0, 5)}`,
+            iataCode: randomIataCode(),
+            city: "Test City",
+        };
+
+        const createAirportResp = await fetchJson("/airports", {
+            method: "POST",
+            body: JSON.stringify(airportPayload),
+        });
+        assertEquals(createAirportResp.response.status, 201, `Failed to create extra airport: ${JSON.stringify(createAirportResp.data)}`);
+        airports.push(createAirportResp.data as { id: string });
+    }
 
     const allPlanesResp = await fetchJson("/planes");
     assertEquals(allPlanesResp.response.status, 200);

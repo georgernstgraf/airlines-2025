@@ -6,6 +6,7 @@
     "npm:@prisma/client@^6.18.0": "6.19.2_prisma@6.19.2",
     "npm:@types/node@^24.2.0": "24.10.13",
     "npm:@vitejs/plugin-vue@^6.0.3": "6.0.4_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_vue@3.5.28_@types+node@24.10.13",
+    "npm:deno@^2.6.1": "2.7.7",
     "npm:he@^1.2.0": "1.2.0",
     "npm:prisma@^6.18.0": "6.19.2",
     "npm:vite-plugin-vue-devtools@^8.0.5": "8.0.6_vite@7.3.1__@types+node@24.10.13__picomatch@4.0.3_vue@3.5.28_@types+node@24.10.13",
@@ -244,6 +245,36 @@
         "@babel/helper-string-parser",
         "@babel/helper-validator-identifier"
       ]
+    },
+    "@deno/darwin-arm64@2.7.7": {
+      "integrity": "sha512-F6Bp1spnTxPJ94OqYNbW84eKWKkKJKtVAtR8ICVb7miFYrObcSEe7X8DFFjyWoiR55mFfXB/yF/LccUG0DXPRg==",
+      "os": ["darwin"],
+      "cpu": ["arm64"]
+    },
+    "@deno/darwin-x64@2.7.7": {
+      "integrity": "sha512-aZWfjh+CsyGcXL/pPCHfYKbX1cZihDbzrXvEMT1cjxqeoJPy74SvXHdsfkjVYZFsruOeIdeJBvSGGzpucAb6Ag==",
+      "os": ["darwin"],
+      "cpu": ["x64"]
+    },
+    "@deno/linux-arm64-glibc@2.7.7": {
+      "integrity": "sha512-Qz206Lr/UE9OkKsGHiWdSUdh6GORUqwhIuUH554sTI8fv2+Tlh+I+w/7pZ1i2XSe65nkVJPVxGlJjxWK+OZNJg==",
+      "os": ["linux"],
+      "cpu": ["arm64"]
+    },
+    "@deno/linux-x64-glibc@2.7.7": {
+      "integrity": "sha512-8vAiyY9sFSOFLDhKX6VPjNFnV+wV58Z+s1E/wr5nx+pjOWs0cnzj06e3GDWHngE9qKnYWttLeMkLjrC7Hy+24Q==",
+      "os": ["linux"],
+      "cpu": ["x64"]
+    },
+    "@deno/win32-arm64@2.7.7": {
+      "integrity": "sha512-R/rvCaKsCCOPoRGIqew7BRyqlvU8r20q7qHjwORU7kyyOs4LpWEKenzeRw5UfllzFVN6fuQfNDOC+xGacXaqIw==",
+      "os": ["win32"],
+      "cpu": ["arm64"]
+    },
+    "@deno/win32-x64@2.7.7": {
+      "integrity": "sha512-jUl9jtK6LWDF3emMuN2Y4kXYBa5hC1KKIBqLgrcu4lO+WFNNH7TKrZ7xVq0WWmc4EZmaj35tker96t78belJiQ==",
+      "os": ["win32"],
+      "cpu": ["x64"]
     },
     "@esbuild/aix-ppc64@0.27.3": {
       "integrity": "sha512-9fJMTNFTWZMh5qwrBItuziu834eOCUcEqymSH7pY+zoMVEZg3gcPuBNxH1EvfVYe9h0x/Ptw8KBzv7qxb7l8dg==",
@@ -846,6 +877,19 @@
     "defu@6.1.4": {
       "integrity": "sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg=="
     },
+    "deno@2.7.7": {
+      "integrity": "sha512-/IhiXaSj4n5vr75grd7j7vAnOtSAKWgyref7XMfh1ZB9kvQSl8KxiaamimWLU7LMqOwChLbN4unIzONbXh4nSw==",
+      "optionalDependencies": [
+        "@deno/darwin-arm64",
+        "@deno/darwin-x64",
+        "@deno/linux-arm64-glibc",
+        "@deno/linux-x64-glibc",
+        "@deno/win32-arm64",
+        "@deno/win32-x64"
+      ],
+      "scripts": true,
+      "bin": true
+    },
     "destr@2.0.5": {
       "integrity": "sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA=="
     },
@@ -1350,6 +1394,11 @@
       "npm:vite@^7.3.1",
       "npm:vue-router@^4.6.4",
       "npm:vue@^3.5.27"
-    ]
+    ],
+    "packageJson": {
+      "dependencies": [
+        "npm:deno@^2.6.1"
+      ]
+    }
   }
 }
