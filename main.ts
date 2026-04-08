@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import type { Context } from 'hono';
 import { cors } from 'hono/cors';
 import * as passengerService from "./service/passenger.ts";
 import * as planeService from "./service/plane.ts";
@@ -6,13 +7,35 @@ import * as airportService from "./service/airport.ts";
 import * as flightService from "./service/flight.ts";
 
 const app = new Hono();
+const api = new Hono();
 app.use('/*', cors());
 
-app.get("/", (c) => c.json({ message: 'Flight API', version: '1.0' }));
+const serveFile = async (c: Context, path: string, contentType: string) => {
+    try {
+        const file = await Deno.readFile(path);
+        return c.body(file, 200, { 'Content-Type': contentType });
+    } catch {
+        return c.text('Not found', 404);
+    }
+};
+
+// Legacy frontend entry points. The API is mounted under /api.
+app.get('/', (c) => serveFile(c, './static/index.html', 'text/html; charset=utf-8'));
+app.get('/index.html', (c) => serveFile(c, './static/index.html', 'text/html; charset=utf-8'));
+app.get('/searchfly.html', (c) => serveFile(c, './static/searchfly.html', 'text/html; charset=utf-8'));
+app.get('/bookfly.html', (c) => serveFile(c, './static/bookfly.html', 'text/html; charset=utf-8'));
+app.get('/styles.css', (c) => serveFile(c, './static/styles.css', 'text/css; charset=utf-8'));
+app.get('/abfluge.png', (c) => serveFile(c, './static/abfluge.png', 'image/png'));
+app.get('/paris-geheimtipps-sehenswuerdigkeiten-eiffelturm-sonnenuntergang.webp', (c) =>
+    serveFile(c, './static/paris-geheimtipps-sehenswuerdigkeiten-eiffelturm-sonnenuntergang.webp', 'image/webp')
+);
+
+api.get('/', (c) => c.json({ message: 'Flight API', version: '1.0' }));
+api.get('/health', (c) => c.json({ status: 'ok' }));
 
 // Passengers
-app.get('/passengers', async (c) => c.json(await passengerService.findMany()));
-app.post('/passengers', async (c) => {
+api.get('/passengers', async (c) => c.json(await passengerService.findMany()));
+api.post('/passengers', async (c) => {
     try {
         return c.json(await passengerService.createPassenger(await c.req.json()), 201);
     } catch (e) {
@@ -21,8 +44,8 @@ app.post('/passengers', async (c) => {
 });
 
 // Planes
-app.get('/planes', async (c) => c.json(await planeService.getAll()));
-app.post('/planes', async (c) => {
+api.get('/planes', async (c) => c.json(await planeService.getAll()));
+api.post('/planes', async (c) => {
     try {
         return c.json(await planeService.createPlane(await c.req.json()), 201);
     } catch (e) {
@@ -31,8 +54,8 @@ app.post('/planes', async (c) => {
 });
 
 // Airports
-app.get('/airports', async (c) => c.json(await airportService.getAll()));
-app.post('/airports', async (c) => {
+api.get('/airports', async (c) => c.json(await airportService.getAllAirports()));
+api.post('/airports', async (c) => {
     try {
         return c.json(await airportService.createAirport(await c.req.json()), 201);
     } catch (e) {
@@ -41,21 +64,21 @@ app.post('/airports', async (c) => {
 });
 
 // Flights
-app.get('/flights', async (c) => {
-    const withRelations = c.req.query('include');
-    if (withRelations) {
-        return c.json(await flightService.findMany());  // TODO with relations
+api.get('/flights', async (c) => {
+    const include = c.req.query('include');
+    if (include === 'relations') {
+        return c.json(await flightService.findManyWithRelations());
     }
     return c.json(await flightService.findMany());
 });
 
-app.get('/flights/:id', async (c) => {
+api.get('/flights/:id', async (c) => {
     const flight = await flightService.findById(c.req.param('id'));
     if (!flight) return c.json({ error: 'Flight not found' }, 404);
     return c.json(flight);
 });
 
-app.post('/flights', async (c) => {
+api.post('/flights', async (c) => {
     try {
         return c.json(await flightService.createFlight(await c.req.json()), 201);
     } catch (e) {
@@ -63,7 +86,7 @@ app.post('/flights', async (c) => {
     }
 });
 
-app.post('/flights/:id/passengers', async (c) => {
+api.post('/flights/:id/passengers', async (c) => {
     try {
         const { passengerIds } = await c.req.json();
         return c.json(await flightService.bookPassengersToFlight(c.req.param('id'), passengerIds));
@@ -71,6 +94,8 @@ app.post('/flights/:id/passengers', async (c) => {
         return c.json({ error: (e as Error).message }, 400);
     }
 });
+
+app.route('/api', api);
 
 Deno.serve({ port: 3000 }, app.fetch);
 console.log('🚀 http://localhost:3000');

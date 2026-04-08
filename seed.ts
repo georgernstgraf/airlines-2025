@@ -42,7 +42,7 @@ if (planes_to_create > 0) {
 
 // ensure airports (no deps)
 console.log(`Ensuring ${ensureAirports} airports...`);
-let airports_to_create = ensureAirports - await airportService.count();
+let airports_to_create = ensureAirports - await airportService.getAirportCount();
 while (airports_to_create > 0) {
     const fake_airport = faker.airline.airport();
     const airportData = {
@@ -64,7 +64,7 @@ console.log(`Ensuring ${ensureFlights} flights...`);
 const flights_to_create = ensureFlights - await flightService.count();
 
 // Fetch available airports and planes (once!)
-const airports = await airportService.getAll();
+const airports = await airportService.getAllAirports();
 const planes = await planeService.getAll();
 
 if (airports.length < 2) {
@@ -111,7 +111,7 @@ const allPassengers = await passengerService.findMany();
 
 console.log(`Found ${allFlights.length} flights and ${allPassengers.length} passengers`);
 
-if (allFlights.length > 0 && allPassengers.length > 0) {  // so only do this if we have both
+if (allFlights.length > 0 && allPassengers.length > 0) { // so only do this if we have both
     let assignedCount = 0;
     for (const f of allFlights) {
         // Random number of passengers per flight (0 to 50)

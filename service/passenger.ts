@@ -18,6 +18,11 @@ export async function createPassenger(data: {
 export async function findMany() {
     return await passengerRepo.findMany();
 }
+
+export async function findManyWithFlights() {
+    return await passengerRepo.findManyWithFlights();
+}
+
 export async function createManyPassengers(data: Array<{
     firstName: string;
     lastName: string;
@@ -31,10 +36,8 @@ export async function createManyPassengers(data: Array<{
         }
     }
 
-    // Delegiere an Prisma (SQLite unterstützt kein skipDuplicates)
-    // Bei Duplikaten wird der gesamte Batch fehlschlagen
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.passenger.createMany({ data });
+    // Delegiere an Repository
+    return await Promise.all(data.map(passenger => passengerRepo.create(passenger)));
 }
 
 export async function updatePassenger(
@@ -53,70 +56,29 @@ export async function updatePassenger(
         }
     }
 
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.passenger.update({
-        where: { id },
-        data,
-        include: { flights: true }
-    });
+    return await passengerRepo.update(id, data);
 }
 
 export async function count() {
     return await passengerRepo.count();
 }
+
 export async function deletePassenger(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
-
-    // Prüfe ob Passagier noch auf Flügen gebucht ist
-    const passengerFlights = await prisma.passenger.findUnique({
-        where: { id },
-        select: { _count: { select: { flights: true } } }
-    });
-
-    if ((passengerFlights?._count.flights ?? 0) > 0) {
-        throw new Error("Cannot delete passenger with active flight bookings");
-    }
-
-    return await prisma.passenger.delete({ where: { id } });
+    return await passengerRepo.delete_(id);
 }
 
 export async function findPassengerById(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.passenger.findUnique({
-        where: { id },
-        include: { flights: true }
-    });
+    return await passengerRepo.findById(id);
 }
 
 export async function findPassengerByEmail(email: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.passenger.findUnique({
-        where: { email }
-    });
+    return await passengerRepo.findByEmail(email);
 }
 
 export async function searchPassengersByName(firstName: string, lastName?: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    const where: { firstName: { contains: string }; lastName?: { contains: string } } = { firstName: { contains: firstName } };
-    if (lastName) {
-        where.lastName = { contains: lastName };
-    }
-    return await prisma.passenger.findMany({
-        where,
-        include: { flights: true },
-        orderBy: [{ lastName: "asc" }, { firstName: "asc" }]
-    });
+    return await passengerRepo.searchByName(firstName, lastName);
 }
 
 export async function getPassengerFlights(passengerId: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.passenger.findUnique({
-        where: { id: passengerId },
-        select: {
-            flights: {
-                include: { origin: true, destination: true, plane: true },
-                orderBy: { departureTime: "asc" }
-            }
-        }
-    });
+    return await passengerRepo.getFlights(passengerId);
 }

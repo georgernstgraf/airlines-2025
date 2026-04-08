@@ -51,63 +51,29 @@ export async function updateAirport(
         }
     }
 
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.airport.update({
-        where: { id },
-        data
-    });
+    return await airportRepo.update(id, data);
 }
 
 export async function deleteAirport(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    
-    // Prüfe ob es noch Flüge gibt, die diesen Airport nutzen
-    const flightCount = await prisma.flight.count({
-        where: {
-            OR: [
-                { originId: id },
-                { destinationId: id }
-            ]
-        }
-    });
-    
-    if (flightCount > 0) {
-        throw new Error("Cannot delete airport with active flights");
-    }
-    
-    return await prisma.airport.delete({
-        where: { id }
-    });
+    return await airportRepo.delete_(id);
 }
 
 export async function findAirportById(id: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.airport.findUnique({
-        where: { id },
-        include: {
-            departingFlights: true,
-            arrivingFlights: true
-        }
-    });
+    return await airportRepo.findById(id);
 }
 
 export async function findAirportByIataCode(iataCode: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.airport.findUnique({
-        where: { iataCode }
-    });
+    return await airportRepo.getByIataCode(iataCode);
 }
 
 export async function searchAirportsByCity(city: string) {
-    const { prisma } = await import("../Repository/db.ts");
-    return await prisma.airport.findMany({
-        where: {
-            city: {
-                contains: city
-            }
-        },
-        orderBy: { name: "asc" }
-    });
+    return await airportRepo.searchByCity(city);
 }
 
-export { count, getAll } from "../Repository/airport.ts";
+export async function getAirportCount() {
+    return await airportRepo.count();
+}
+
+export async function getAllAirports() {
+    return await airportRepo.getAll();
+}
