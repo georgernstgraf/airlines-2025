@@ -33,6 +33,46 @@ export async function findMany() {
 export async function findManyWithRelations() {
     return await flightRepo.findManyWithRelations();
 }
+
+export async function searchFlights(params: {
+    departure?: string;
+    arrival?: string;
+    date?: string;
+}) {
+    // Get all flights with relations first
+    const flights = await flightRepo.findManyWithRelations();
+
+    // Filter by departure city/IATA code
+    let filtered = flights;
+
+    if (params.departure) {
+        const term = params.departure.toLowerCase();
+        filtered = filtered.filter(
+            (f) =>
+                f.origin.city.toLowerCase().includes(term) ||
+                f.origin.iataCode.toLowerCase().includes(term)
+        );
+    }
+
+    // Filter by arrival city/IATA code
+    if (params.arrival) {
+        const term = params.arrival.toLowerCase();
+        filtered = filtered.filter(
+            (f) =>
+                f.destination.city.toLowerCase().includes(term) ||
+                f.destination.iataCode.toLowerCase().includes(term)
+        );
+    }
+
+    // Filter by date
+    if (params.date) {
+        const searchDate = new Date(params.date).toDateString();
+        filtered = filtered.filter((f) => new Date(f.departureTime).toDateString() === searchDate);
+    }
+
+    // Return top 50 results
+    return filtered.slice(0, 50);
+}
 export async function regenerateAllIds() {
     const ids = await flightRepo.allIds();
     await Promise.all(ids.map(async (id) => {

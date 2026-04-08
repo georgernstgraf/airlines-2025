@@ -186,6 +186,7 @@ const allFlights = ref([])
 const allAirports = ref([])
 const showAll = ref(false)
 const allFlightsSearch = ref('')
+const filteredFlightsResult = ref([])
 
 const departureAirports = computed(() =>
   allAirports.value.filter(a =>
@@ -200,6 +201,12 @@ const arrivalAirports = computed(() =>
 )
 
 const filteredFlights = computed(() => {
+  // If we have server-side search results, use them
+  if (searched.value && filteredFlightsResult.value.length > 0) {
+    return filteredFlightsResult.value
+  }
+  
+  // Fallback to client-side filtering (for backward compatibility)
   if (!searched.value) return []
 
   return allFlights.value.filter(flight => {
@@ -261,14 +268,36 @@ const calculateDuration = (flight) => {
 
 const calculatePrice = (flight) => Math.floor(Math.random() * 200) + 50
 
-const searchFlights = () => {
+const searchFlights = async () => {
   if (!searchParams.value.departure || !searchParams.value.arrival || !searchParams.value.date) {
     alert('Bitte füllen Sie alle Felder aus!')
     return
   }
-  searched.value = true
-  showAll.value = false
-  selectedFlight.value = null
+
+  loading.value = true
+  try {
+    // Use server-side search endpoint
+    const searchUrl = new URL('/api/flights/search', window.location.origin)
+    searchUrl.searchParams.set('departure', searchParams.value.departure)
+    searchUrl.searchParams.set('arrival', searchParams.value.arrival)
+    searchUrl.searchParams.set('date', searchParams.value.date)
+
+    const response = await fetch(searchUrl.toString())
+    if (response.ok) {
+      filteredFlightsResult.value = await response.json()
+      searched.value = true
+      showAll.value = false
+      selectedFlight.value = null
+    } else {
+      console.error('Search failed:', response.status)
+      alert('Suche fehlgeschlagen. Bitte versuchen Sie es später erneut.')
+    }
+  } catch (error) {
+    console.error('Failed to search flights:', error)
+    alert('Es gab einen Fehler bei der Suche.')
+  } finally {
+    loading.value = false
+  }
 }
 
 const showAllFlights = () => {

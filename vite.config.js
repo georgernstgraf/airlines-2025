@@ -2,13 +2,17 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
+// vite-plugin-vue-devtools disabled: causes response hang in Deno npm compat
+// import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    outDir: 'dist/client'
+  },
   plugins: [
     vue(),
-    vueDevTools(),
+    // vueDevTools(),
   ],
   build: {
     outDir: 'dist/client'
