@@ -1,5 +1,17 @@
 # Änderungen - Airline-Anwendung Update
 
+## Phase 6 - Development Workflow
+
+### ✅ Fertig
+- Empfohlener Dev-Modus klar definiert: Hono bleibt API-Server, Vite laeuft nur fuer HMR.
+- Produktionsmodus klar definiert: nur Hono laeuft, Vite ist kein Server mehr.
+- Optionaler One-Server-Dev-Modus dokumentiert: `vite build --watch` + Hono-Serving.
+- Neue Deno Tasks ergaenzt:
+  - `ui:dev`
+  - `ui:build`
+  - `ui:build:watch`
+- Vite-Build-Ausgabe auf `dist/client` gesetzt, passend zum Hono-Static-Serving.
+
 ## 📊 Datenbank & Seed
 
 ### ✅ Fertig
@@ -147,7 +159,7 @@ Zu stylende Elemente:
 ### Anwendung starten
 
 1. Backend: `deno run -A --env-file --watch main.ts`
-2. Frontend: `npm run dev` im AirlinesLioJakob Ordner
+2. Frontend: `deno task ui:dev` im Repository-Root
 3. Besuche: http://localhost:5173
 
 ### Seed ausführen (falls noch nicht geschehen)

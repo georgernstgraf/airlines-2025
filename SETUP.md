@@ -4,8 +4,8 @@
 
 Diese Anwendung besteht aus zwei Teilen:
 
-1. **Backend** (Deno/TypeScript) - Läuft auf http://localhost:3000
-2. **Frontend** (Vue.js) - Läuft auf http://localhost:5173
+1. **Backend** (Deno/TypeScript, Hono) - API auf http://localhost:3000
+2. **Frontend** (Vue.js, Vite) - HMR in Entwicklung auf http://localhost:5173
 
 ## Voraussetzungen
 
@@ -31,40 +31,60 @@ deno run -A --env-file seed.ts
 ```
 
 Dies erstellt:
-
 - 20.000 Passagiere
 - 100 Flughäfen (mit echten IATA-Codes von Faker)
 - 250 Flugzeuge
 - **6000 Flüge** mit verschiedenen Routen, Zeiten und Kapazitäten
 
-### 3. Backend starten
+### 3. API starten (Hono)
 
 ```bash
-deno run -A --env-file --watch main.ts
+deno task dev
 ```
 
-Backend läuft unter: http://localhost:3000
+API laeuft unter: http://localhost:3000
 
-### 4. Frontend starten (in einem neuen Terminal)
+### 4. Frontend-HMR starten (in einem neuen Terminal)
 
 ```bash
-cd AirlinesLioJakob
-npm install  # Falls noch nicht gemacht
-npm run dev
+deno task ui:dev
 ```
 
-Frontend läuft unter: http://localhost:5173
+Frontend-HMR laeuft unter: http://localhost:5173
+
+Hinweis:
+- Empfohlener Entwicklungsmodus: Hono fuer API + Vite nur fuer HMR.
+- Produktionsmodus: nur Hono, kein Vite-Server.
+
+### 5. Produktion lokal testen (Hono only)
+
+```bash
+deno task ui:build
+deno task server
+```
+
+Hono serviert dann die SPA aus `dist/client` (inklusive Assets und History-Fallback).
+
+### 6. Optional: Ein Runtime-Server in Entwicklung (ohne HMR)
+
+```bash
+# Terminal 1
+deno task ui:build:watch
+
+# Terminal 2
+deno task dev
+```
+
+Damit rendert Hono immer die aktuelle Build-Ausgabe, aber ohne HMR.
 
 ## Funktionen
 
 ### 🏠 Homepage
-
 - Willkommensbereich
 - Erklärung wie die App funktioniert
 - Call-to-Action zum Flügesuchen
 
 ### 🔍 Flüge suchen
-
 - Suche nach Abflugort, Zielort, Datum und Anzahl Passagiere
 - Autocomplete für Städte basierend auf Flughafen-Daten
 - Live-Filterung der 6000 verfügbaren Flüge
@@ -72,7 +92,6 @@ Frontend läuft unter: http://localhost:5173
 - Auswahl eines Fluges
 
 ### ✈️ Flüge buchen
-
 - Einzige Anforderung: Passagier-Informationen (Vorname, Nachname, Email)
 - Keine Zahlungsinformationen erforderlich!
 - Validierung aller Felder
@@ -82,7 +101,6 @@ Frontend läuft unter: http://localhost:5173
 ### 📊 Daten
 
 Die Datenbank enthält:
-
 - **Flughäfen**: 100 verschiedene, mit echten IATA-Codes und Städten
 - **Flugzeuge**: 250 verschiedene Modelle mit unterschiedlicher Kapazität (10-850 Plätze)
 - **Flüge**: 6000 Flüge mit verschiedenen Kombinationen
@@ -91,7 +109,6 @@ Die Datenbank enthält:
 ## Technologie-Stack
 
 ### Backend
-
 - **Deno** - TypeScript Runtime
 - **Hono** - Web Framework
 - **Prisma** - ORM für Datenbank
@@ -99,7 +116,6 @@ Die Datenbank enthält:
 - **SQLite** - Datenbank
 
 ### Frontend
-
 - **Vue.js 3** - Progressive Framework
 - **Vue Router** - Routing
 - **Vite** - Build Tool
@@ -119,9 +135,8 @@ POST /flights/:id/passengers       # Passagiere buchen
 ## Design-Hinweise
 
 Die Anwendung ist **ohne echtes CSS-Design** aufgebaut. Das andere Team kann:
-
 - CSS anpassen basierend auf CheckFelix Design
-- Nur die `.vue` Dateien im `AirlinesLioJakob/src/pages` Ordner editieren
+- Nur die `.vue` Dateien im `src/pages` Ordner editieren
 - Keine Vue-Logik ändern - nur CSS modifizieren
 
 ## Entwicklung
@@ -146,20 +161,16 @@ deno run -A prisma studio
 ## Problembehebung
 
 ### "Cannot find module..." Fehler
-
-→ `npm install` im `AirlinesLioJakob` Ordner ausführen
+→ Dependencies installieren und danach erneut starten
 
 ### Backend lädt nicht auf http://localhost:3000
-
 → Stelle sicher, dass Deno installiert ist: `deno --version`
 
 ### Flüge werden nicht angezeigt
-
 → Stelle sicher, dass du `deno run -A --env-file seed.ts` ausgeführt hast
 
 ### CORS-Fehler
-
-→ Der Proxy in `vite.config.js` sollte das beheben. Falls nicht, prüfe, ob Backend auf 3000 läuft.
+→ Der Proxy in `vite.config.js` sollte das beheben. Falls nicht, pruefe, ob die API auf :3000 laeuft.
 
 ## Next Steps
 
