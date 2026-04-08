@@ -140,7 +140,7 @@ Zu stylende Elemente:
 
 ### Anwendung starten
 1. Backend: `deno run -A --env-file --watch main.ts`
-2. Frontend: `npm run dev` im AirlinesLioJakob Ordner
+2. Frontend: `deno task ui:dev` im Repository-Root
 3. Besuche: http://localhost:5173
 
 ### Seed ausführen (falls noch nicht geschehen)

@@ -115,6 +115,11 @@ api.post("/bookings", async (c) => {
 
 app.route("/api", api);
 
+// Redirect legacy static entry points to SPA routes.
+app.get('/index.html', (c) => c.redirect('/', 301));
+app.get('/searchfly.html', (c) => c.redirect('/search', 301));
+app.get('/bookfly.html', (c) => c.redirect('/book', 301));
+
 // Serve built SPA assets from dist/client (e.g. /assets/*).
 app.use('/assets/*', serveStatic({ root: './dist/client' }));
 app.get('/favicon.ico', serveStatic({ root: './dist/client' }));
