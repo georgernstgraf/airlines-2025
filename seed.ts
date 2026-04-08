@@ -3,7 +3,7 @@ import * as planeService from "./service/plane.ts";
 import * as airportService from "./service/airport.ts";
 import * as flightService from "./service/flight.ts";
 import { faker } from "@faker-js/faker";
-import { disconnect } from "./Repository/db.ts";
+import { disconnect, prisma } from "./Repository/db.ts";
 
 const ensurePassengers = 20000;
 const ensureAirports = 100;
@@ -61,6 +61,16 @@ while (airports_to_create > 0) {
 
 // ensure flights (depends on airport, plane)
 console.log(`Ensuring ${ensureFlights} flights...`);
+const now = new Date();
+const existingFlights = await flightService.findMany();
+const outdatedFlights = existingFlights.filter((f) => new Date(f.departureTime) < now).length;
+
+// Keep test data fresh: if any existing flights are in the past, rebuild all flights.
+if (existingFlights.length > 0 && outdatedFlights > 0) {
+    console.log(`  Found ${outdatedFlights}/${existingFlights.length} past flights, rebuilding flight data...`);
+    await prisma.flight.deleteMany();
+}
+
 const flights_to_create = ensureFlights - await flightService.count();
 
 // Fetch available airports and planes (once!)
@@ -97,7 +107,14 @@ if (flights_to_create > 0) {
             planeId: plane.id,
         };
     });
-    await flightService.createManyFlights(flightData);
+
+    // SQLite can time out on huge parallel write bursts. Insert in chunks.
+    const chunkSize = 250;
+    for (let i = 0; i < flightData.length; i += chunkSize) {
+        const chunk = flightData.slice(i, i + chunkSize);
+        await prisma.flight.createMany({ data: chunk });
+    }
+
     console.log(`  Created ${flights_to_create} flights`);
 } else {
     console.log(`  No new flights needed, reassigning flight numbers...`);
