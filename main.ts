@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import type { Context } from 'hono';
 import { cors } from 'hono/cors';
+import { serveStatic } from 'hono/deno';
 import * as passengerService from "./service/passenger.ts";
 import * as planeService from "./service/plane.ts";
 import * as airportService from "./service/airport.ts";
@@ -18,17 +19,6 @@ const serveFile = async (c: Context, path: string, contentType: string) => {
         return c.text('Not found', 404);
     }
 };
-
-// Legacy frontend entry points. The API is mounted under /api.
-app.get('/', (c) => serveFile(c, './static/index.html', 'text/html; charset=utf-8'));
-app.get('/index.html', (c) => serveFile(c, './static/index.html', 'text/html; charset=utf-8'));
-app.get('/searchfly.html', (c) => serveFile(c, './static/searchfly.html', 'text/html; charset=utf-8'));
-app.get('/bookfly.html', (c) => serveFile(c, './static/bookfly.html', 'text/html; charset=utf-8'));
-app.get('/styles.css', (c) => serveFile(c, './static/styles.css', 'text/css; charset=utf-8'));
-app.get('/abfluge.png', (c) => serveFile(c, './static/abfluge.png', 'image/png'));
-app.get('/paris-geheimtipps-sehenswuerdigkeiten-eiffelturm-sonnenuntergang.webp', (c) =>
-    serveFile(c, './static/paris-geheimtipps-sehenswuerdigkeiten-eiffelturm-sonnenuntergang.webp', 'image/webp')
-);
 
 api.get('/', (c) => c.json({ message: 'Flight API', version: '1.0' }));
 api.get('/health', (c) => c.json({ status: 'ok' }));
@@ -96,6 +86,19 @@ api.post('/flights/:id/passengers', async (c) => {
 });
 
 app.route('/api', api);
+
+// Serve built SPA assets from dist/client (e.g. /assets/*).
+app.use('/assets/*', serveStatic({ root: './dist/client' }));
+app.get('/favicon.ico', serveStatic({ root: './dist/client' }));
+app.get('/vite.svg', serveStatic({ root: './dist/client' }));
+
+// SPA fallback for Vue Router history mode. Keep this after API routes.
+app.get('*', async (c) => {
+    if (c.req.path.startsWith('/api')) {
+        return c.notFound();
+    }
+    return serveFile(c, './dist/client/index.html', 'text/html; charset=utf-8');
+});
 
 Deno.serve({ port: 3000 }, app.fetch);
 console.log('🚀 http://localhost:3000');
